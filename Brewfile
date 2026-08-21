@@ -12,6 +12,7 @@ brew "ripgrep"
 brew "shellcheck"
 brew "tree-sitter"
 brew "zoxide"
+brew "zplug"
 brew "zsh"
 
 # --- GUI apps ---
