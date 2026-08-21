@@ -16,6 +16,8 @@ brew "zplug"
 brew "zsh"
 
 # --- GUI apps ---
+cask "1password"
+cask "1password-cli"
 cask "beeper"
 cask "claude"
 cask "dropbox"
