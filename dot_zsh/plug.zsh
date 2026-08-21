@@ -1,3 +1,6 @@
+# Manage zplug with zplug
+zplug 'zplug/zplug', hook-build:'zplug --self-manage'
+
 # completion and some niceties for AWS CLI
 zplug "eastokes/aws-plugin-zsh"
 
