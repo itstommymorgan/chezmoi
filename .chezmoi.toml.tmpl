@@ -1,0 +1,11 @@
+{{- $hostname := promptStringOnce . "hostname" "Hostname for this machine" -}}
+{{- $email := promptStringOnce . "email" "Git commit email" "tommy@tommymorgan.name" -}}
+{{- $companyName := promptStringOnce . "companyName" "Current employer project folder name (blank if none)" "" -}}
+
+[data]
+    hostname    = {{ $hostname | quote }}
+    email       = {{ $email | quote }}
+    companyName = {{ $companyName | quote }}
+
+[onepassword]
+    prompt = false
