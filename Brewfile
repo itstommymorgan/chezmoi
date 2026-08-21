@@ -1,3 +1,6 @@
+# --- Taps ---
+tap "OJFord/formulae"
+
 # --- CLI tools ---
 brew "bat"
 brew "curl"
@@ -6,6 +9,7 @@ brew "diff-so-fancy"
 brew "eza"
 brew "gh"
 brew "git"
+brew "loginitems"
 brew "mise"
 brew "neovim"
 brew "ripgrep"

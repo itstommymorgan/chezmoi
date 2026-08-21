@@ -20,6 +20,9 @@ if ! /usr/bin/pgrep oahd >/dev/null 2>&1; then
 fi
 {{ end -}}
 
+# trust loginitems so brew doesn't complain
+brew trust --formula ojford/formulae/loginitems
+
 brew bundle --file="{{ .chezmoi.sourceDir }}/Brewfile"
 
 {{ if .hostname -}}
