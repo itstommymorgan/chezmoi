@@ -9,7 +9,9 @@ return {
     'ludovicchabant/vim-gutentags',
     config = function()
       -- use a temp folder for storing tags
-      vim.g.gutentags_cache_dir = '~/.tags-cache'
+      local tags_cache_dir = vim.fn.stdpath('cache') .. '/tags'
+      vim.fn.mkdir(tags_cache_dir, 'p')
+      vim.g.gutentags_cache_dir = tags_cache_dir
     end,
   },
 

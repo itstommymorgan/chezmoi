@@ -55,12 +55,6 @@ return {
     end,
   },
 
-  -- highlight hex codes
-  {
-    "norcalli/nvim-colorizer.lua",
-    config = true
-  },
-
   -- pretty list
   {
     'folke/trouble.nvim',
