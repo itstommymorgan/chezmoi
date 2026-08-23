@@ -61,9 +61,6 @@ return {
     config = true,
   },
 
-  -- Add support for a wide range of filetypes
-  'sheerun/vim-polyglot',
-
   -- Allow you to edit files directly from the quickfix results
   'stefandtw/quickfix-reflector.vim',
 
