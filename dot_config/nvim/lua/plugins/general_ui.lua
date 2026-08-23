@@ -68,29 +68,30 @@ return {
 
 	-- file tree browser window
 	{
-		"ms-jpq/chadtree",
-		branch = "chad",
-		build = "python3 -m chadtree deps",
-		config = function()
-			-- use - to toggle the tree
-			config.nmap("-", ":silent CHADopen<cr>")
-
-			local ignore_list = { ".DS_Store", ".directory", "thumbs.db", ".git" }
-
-			vim.g.chadtree_settings = {
-				ignore = {
-					name_exact = ignore_list,
+		"nvim-neo-tree/neo-tree.nvim",
+		branch = "v3.x",
+		cmd = "Neotree",
+		keys = {
+			{ "-", "<cmd>Neotree toggle<cr>", desc = "Toggle file tree" },
+		},
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"MunifTanjim/nui.nvim",
+			"nvim-tree/nvim-web-devicons",
+		},
+		opts = {
+			filesystem = {
+				filtered_items = {
+					hide_dotfiles = false,
+					never_show = { ".git" },
 				},
-				keymap = {
-					quit = { "-" },
-					bigger = { ">" },
-					smaller = { "<" },
+			},
+			window = {
+				mappings = {
+					["-"] = "close_window",
 				},
-				theme = {
-					icon_colour_set = "github",
-				},
-			}
-		end,
+			},
+		},
 	},
 
 	-- fuzzy finder over lists
