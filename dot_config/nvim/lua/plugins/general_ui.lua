@@ -86,14 +86,6 @@ return {
     end
   },
 
-  -- autoswitch between relative and absolute numbers based on window status
-  {
-    'myusuf3/numbers.vim',
-    config = function()
-      vim.g.numbers_exclude = vim.g.tm_special_buffers
-    end
-  },
-
   -- fuzzy finder over lists
   {
     'nvim-telescope/telescope.nvim',
