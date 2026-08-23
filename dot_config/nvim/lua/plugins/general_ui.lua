@@ -5,7 +5,7 @@ return {
   -- statusline
   {
     'nvim-lualine/lualine.nvim',
-    requires = { 'kyazdani42/nvim-web-devicons', opt = true },
+    requires = { 'nvim-tree/nvim-web-devicons', opt = true },
     config = true,
     opts = {
       options = {
@@ -46,7 +46,7 @@ return {
    -- pretty list
   {
     'folke/trouble.nvim',
-    dependencies = { 'kyazdani42/nvim-web-devicons' },
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
     config = true
   },
 
@@ -99,7 +99,7 @@ return {
     'nvim-telescope/telescope.nvim',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'nvim-lua/popup.nvim',
+      'nvim-tree/nvim-web-devicons',
       { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make'}
     },
     config = function()
