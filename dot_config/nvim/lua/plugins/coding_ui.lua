@@ -30,14 +30,8 @@ return {
   -- Enables :GBrowse, autocomplete, etc. to pull from GitHub.
   'tpope/vim-rhubarb',
 
-  -- automatically show pairs
-  {
-    'windwp/nvim-autopairs',
-    after = {'nvim-treesitter', 'nvim-cmp'},
-    config = function()
-      require('nvim-autopairs').setup({})
-    end,
-  },
+  -- rainbow delimiters
+  'HiPhish/rainbow-delimiters.nvim',
 
   -- show indentation guidelines
   {

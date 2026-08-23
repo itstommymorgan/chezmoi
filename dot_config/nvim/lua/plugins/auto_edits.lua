@@ -4,6 +4,15 @@ return {
   -- keep HTML tags in sync
   'AndrewRadev/tagalong.vim',
 
+  -- automatically create matching pairs
+  {
+    'windwp/nvim-autopairs',
+    after = {'nvim-treesitter'},
+    config = function()
+      require('nvim-autopairs').setup({})
+    end,
+  },
+
   -- autogenerate tagfiles
   {
     'ludovicchabant/vim-gutentags',
