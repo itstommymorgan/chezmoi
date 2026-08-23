@@ -2,10 +2,14 @@
 
 return {
   -- LSP config
-  'neovim/nvim-lspconfig',
-
-  -- LSP Installer
-  'williamboman/nvim-lsp-installer',
+  { 
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      "mason-org/mason.nvim",
+      "WhoIsSethDaniel/mason-tool-installer.nvim",
+    },
+  },
+  
 
   -- LSP signature completion support
   {
