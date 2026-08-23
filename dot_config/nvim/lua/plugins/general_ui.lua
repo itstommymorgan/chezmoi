@@ -2,131 +2,145 @@
 -- code-specific) editing in neovim.
 
 return {
-  -- statusline
-  {
-    'nvim-lualine/lualine.nvim',
-    requires = { 'nvim-tree/nvim-web-devicons', opt = true },
-    config = true,
-    opts = {
-      options = {
-        icons_enabled = true,
-        theme = 'auto',
-        component_separators = { left = '', right = ''},
-        section_separators = { left = '', right = ''},
-        disabled_filetypes = {},
-        always_divide_middle = true,
-      },
-      sections = {
-        lualine_a = {'mode'},
-        lualine_b = {'branch', 'diff', 'diagnostics'},
-        lualine_c = {'filename'},
-        lualine_x = {'encoding', 'fileformat', 'filetype'},
-        lualine_y = {'progress'},
-        lualine_z = {'location'}
-      },
-      inactive_sections = {
-        lualine_a = {},
-        lualine_b = {},
-        lualine_c = {'filename'},
-        lualine_x = {'location'},
-        lualine_y = {},
-        lualine_z = {}
-      },
-      tabline = {},
-      extensions = {}
-    },
-  },
+	-- statusline
+	{
+		"nvim-lualine/lualine.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
+		opts = {
+			options = {
+				icons_enabled = true,
+				theme = "auto",
+				component_separators = { left = "", right = "" },
+				section_separators = { left = "", right = "" },
+				disabled_filetypes = {},
+				always_divide_middle = true,
+			},
+			sections = {
+				lualine_a = { "mode" },
+				lualine_b = { "branch", "diff", "diagnostics" },
+				lualine_c = {},
+				lualine_x = { "encoding", "fileformat", "filetype" },
+				lualine_y = { "progress" },
+				lualine_z = { "location" },
+			},
+			inactive_sections = {
+				lualine_a = {},
+				lualine_b = {},
+				lualine_c = {},
+				lualine_x = { "location" },
+				lualine_y = {},
+				lualine_z = {},
+			},
+			tabline = {},
+			extensions = {},
+			winbar = {
+				lualine_b = { "filename" },
+				lualine_c = { "navic" },
+			},
+			inactive_winbar = {
+				lualine_b = { "filename" },
+				lualine_c = { "navic" },
+			},
+		},
+	},
 
-  --improves on matchit, adding a lot of text objects and some logic.
-  'andymass/vim-matchup',
+	--improves on matchit, adding a lot of text objects and some logic.
+	"andymass/vim-matchup",
 
-   -- the theme
-  { 'dracula/vim', as = 'dracula' },
+	-- the theme
+	{ "dracula/vim", as = "dracula" },
 
-   -- pretty list
-  {
-    'folke/trouble.nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = true
-  },
+	-- pretty list
+	{
+		"folke/trouble.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		config = true,
+	},
 
-  -- dashboard
-  'glepnir/dashboard-nvim',
+	-- dashboard
+	"glepnir/dashboard-nvim",
 
-  -- smooth scrolling operations
-  {
-    'karb94/neoscroll.nvim',
-    config = true,
-  },
+	-- smooth scrolling operations
+	{
+		"karb94/neoscroll.nvim",
+		config = true,
+	},
 
-  -- file tree browser window
-  {
-    'ms-jpq/chadtree',
-    branch = 'chad',
-    build = 'python3 -m chadtree deps',
-    config = function()
-      -- use - to toggle the tree
-      config.nmap('-', ':silent CHADopen<cr>')
+	-- file tree browser window
+	{
+		"ms-jpq/chadtree",
+		branch = "chad",
+		build = "python3 -m chadtree deps",
+		config = function()
+			-- use - to toggle the tree
+			config.nmap("-", ":silent CHADopen<cr>")
 
-      local ignore_list = {'.DS_Store', '.directory', 'thumbs.db', '.git'}
+			local ignore_list = { ".DS_Store", ".directory", "thumbs.db", ".git" }
 
-      vim.g.chadtree_settings = {
-        ignore = {
-          name_exact = ignore_list
-        },
-        keymap = {
-          quit = {'-'},
-          bigger = {'>'},
-          smaller = {'<'}
-        },
-        theme = {
-          icon_colour_set = 'github'
-        }
-      }
-    end
-  },
+			vim.g.chadtree_settings = {
+				ignore = {
+					name_exact = ignore_list,
+				},
+				keymap = {
+					quit = { "-" },
+					bigger = { ">" },
+					smaller = { "<" },
+				},
+				theme = {
+					icon_colour_set = "github",
+				},
+			}
+		end,
+	},
 
-  -- fuzzy finder over lists
-  {
-    'nvim-telescope/telescope.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-tree/nvim-web-devicons',
-      { 'nvim-telescope/telescope-fzf-native.nvim', build = 'make'}
-    },
-    config = function()
-      local actions = require("telescope.actions")
-      local trouble = require("trouble.sources.telescope")
+	-- fuzzy finder over lists
+	{
+		"nvim-telescope/telescope.nvim",
+		dependencies = {
+			"nvim-lua/plenary.nvim",
+			"nvim-tree/nvim-web-devicons",
+			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+		},
+		config = function()
+			local actions = require("telescope.actions")
+			local trouble = require("trouble.sources.telescope")
 
-      require('telescope').setup({
-          defaults = {
-            mappings = {
-              i = {
-                ["<c-t>"] = trouble.open,
-                ["<esc>"] = actions.close
-              },
-              n = {
-                ["<c-t>"] = trouble.open
-              }
-            },
-            vimgrep_arguments = {
-              'rg', '--hidden', '--color=never', '--no-heading', '--with-filename', '--line-number', '--column', '--smart-case'
-            }
-          },
-          pickers = {
-            find_files = {
-              hidden = true
-            }
-          }
-        })
+			require("telescope").setup({
+				defaults = {
+					mappings = {
+						i = {
+							["<c-t>"] = trouble.open,
+							["<esc>"] = actions.close,
+						},
+						n = {
+							["<c-t>"] = trouble.open,
+						},
+					},
+					vimgrep_arguments = {
+						"rg",
+						"--hidden",
+						"--color=never",
+						"--no-heading",
+						"--with-filename",
+						"--line-number",
+						"--column",
+						"--smart-case",
+					},
+				},
+				pickers = {
+					find_files = {
+						hidden = true,
+					},
+				},
+			})
 
-      require('telescope').load_extension('fzf')
-    end
-  },
+			require("telescope").load_extension("fzf")
+		end,
+	},
 
-  -- native FZF impl for Telescope
-  {'nvim-telescope/telescope-fzf-native.nvim', build = 'make' },
+	-- native FZF impl for Telescope
+	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 
-   -- try to hide ansi escape codes
-  'powerman/vim-plugin-AnsiEsc',
+	-- try to hide ansi escape codes
+	"powerman/vim-plugin-AnsiEsc",
 }
