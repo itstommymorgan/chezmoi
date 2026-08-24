@@ -13,7 +13,7 @@ config.map("<Leader>Q", ":qa!<CR>")
 -- <Leader>h/j/k/l navigates windows
 local keys = { "h", "j", "k", "l", "H", "J", "K", "L" }
 for count = 1, #keys do
-	key = keys[count]
+	local key = keys[count]
 	config.map("<Leader>" .. key, "<C-W>" .. key)
 end
 
@@ -44,7 +44,7 @@ config.nmap("<C-Space><C-Space>", ":nohls<CR>", { silent = true })
 --  keep search results in the center of the screen
 local search_keys = { "n", "N", "*", "#", "g*", "g#" }
 for count = 1, #search_keys do
-	key = search_keys[count]
+	local key = search_keys[count]
 	config.nmap(key, key .. "zz", { silent = true, noremap = false })
 end
 
