@@ -33,7 +33,7 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 1. `run_once_before_20-use-1password-for-ssh.sh.tmpl` — interactively walks through enabling the 1Password SSH agent (blocks on user confirmation).
 2. `run_once_before_99-disable-spotlight-shortcut.sh.tmpl` — frees the Spotlight shortcut via `PlistBuddy`.
 3. `run_onchange_before_10-install-homebrew.sh.tmpl` — installs Xcode CLT, Homebrew, Rosetta (arm64 only), runs `brew bundle` against `Brewfile`, and sets the machine hostname.
-4. `run_onchange_after_10-install-mise.sh.tmpl` / `run_onchange_after_10-install-npm-packages.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node) and global npm packages (currently `@agentclientprotocol/claude-agent-acp`, used by the nvim `agentic` plugin below).
+4. `run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
 5. `run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
 6. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
 7. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
@@ -51,7 +51,7 @@ Plugin-managed via `lazy.nvim` (bootstrapped in `lua/plugin_manager.lua`, which 
 
 Notable non-obvious pieces:
 - `lua/filetypes.lua` teaches Neovim to detect filetypes for chezmoi's `dot_*` naming convention (e.g. a buffer at `.../dot_zshrc` is filetype-detected as if it were `.zshrc`).
-- `lua/plugins/agentic.lua` wires up `agentic.nvim` with `provider = "claude-agent-acp"` (the npm package installed by the provisioning step above) for driving Claude Code from inside Neovim, bound under `<Leader>a{t,c,n}`.
+- `lua/plugins/claudecode.lua` wires up `coder/claudecode.nvim` (depends on `folke/snacks.nvim`) for driving Claude Code from inside Neovim; it runs the `claude` CLI (installed via the `claude-code` Homebrew cask) in an embedded terminal over the same WebSocket protocol as the official VS Code extension, bound under `<Leader>a*`.
 - `lua/keybindings.lua` is the entry point for keymaps; per-plugin keybindings live in `lua/keybindings/{dashboard,fterm,fugitive,telescope,trouble}.lua`.
 
 ## Hammerspoon (`dot_hammerspoon`)
