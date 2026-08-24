@@ -1,30 +1,29 @@
 -- This file contains configuration information for plugins that perform
 -- automatic edits (or other operations like ctags generation) based on context. Programmer's little helpers.
 return {
-  -- keep HTML tags in sync
-  'AndrewRadev/tagalong.vim',
+	-- keep HTML tags in sync
+	"AndrewRadev/tagalong.vim",
 
-  -- automatically create matching pairs
-  {
-    'windwp/nvim-autopairs',
-    after = {'nvim-treesitter'},
-    config = function()
-      require('nvim-autopairs').setup({})
-    end,
-  },
+	-- automatically create matching pairs
+	{
+		"windwp/nvim-autopairs",
+		dependencies = { "nvim-treesitter" },
+		config = function()
+			require("nvim-autopairs").setup({})
+		end,
+	},
 
-  -- autogenerate tagfiles
-  {
-    'ludovicchabant/vim-gutentags',
-    config = function()
-      -- use a temp folder for storing tags
-      local tags_cache_dir = vim.fn.stdpath('cache') .. '/tags'
-      vim.fn.mkdir(tags_cache_dir, 'p')
-      vim.g.gutentags_cache_dir = tags_cache_dir
-    end,
-  },
+	-- autogenerate tagfiles
+	{
+		"ludovicchabant/vim-gutentags",
+		config = function()
+			-- use a temp folder for storing tags
+			local tags_cache_dir = vim.fn.stdpath("cache") .. "/tags"
+			vim.fn.mkdir(tags_cache_dir, "p")
+			vim.g.gutentags_cache_dir = tags_cache_dir
+		end,
+	},
 
-  -- Automatically add 'end' statements as appropriate
-  'tpope/vim-endwise',
-
+	-- Automatically add 'end' statements as appropriate
+	"tpope/vim-endwise",
 }
