@@ -15,4 +15,7 @@ __tm_setup_homebrew() {
   eval $(${BREW_ROOT}/bin/brew shellenv)
 }
 
-[[ ! -o interactive ]] && __tm_setup_homebrew
+if [[ ! -o interactive ]]; then
+  __tm_setup_homebrew
+  eval "$(mise activate zsh --shims)"
+fi

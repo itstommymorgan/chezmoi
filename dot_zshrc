@@ -3,6 +3,8 @@
 # interactive shells.
 __tm_setup_homebrew
 
+eval "$(mise activate zsh)"
+
 source $(brew --prefix)/opt/zplug/init.zsh
 
 # and add local python packages
