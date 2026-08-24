@@ -26,6 +26,7 @@ return {
 		-- (o/p/t/u) lives on the snacks.nvim spec instead, since those
 		-- call Snacks.terminal/gitbrowse rather than fugitive commands.
 		keys = {
+			{ "<Leader>g", nil, desc = "Git" },
 			{ "<Leader>gb", ":Git blame<CR>", mode = "", desc = "Git blame" },
 			{ "<Leader>gd", ":Gdiff<CR>", mode = "", desc = "Git diff" },
 			{ "<Leader>gl", ":Git log<CR>", mode = "", desc = "Git log" },

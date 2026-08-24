@@ -102,13 +102,14 @@ return {
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
 		keys = {
+			{ "<Leader>f", nil, desc = "Find..." },
 			{ "<Leader>f<Leader>", "<cmd>Telescope grep_string<cr>", desc = "Grep string under cursor" },
-			{ "<Leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", desc = "Buffers" },
+			{ "<Leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", desc = "Find buffers" },
 			{ "<Leader>ff", "<cmd>Telescope find_files theme=ivy<cr>", desc = "Find files" },
 			{ "<Leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
-			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
-			{ "<Leader>fm", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
-			{ "<Leader>ft", "<cmd>Telescope tags<cr>", desc = "Tags" },
+			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find help tags" },
+			{ "<Leader>fm", "<cmd>Telescope keymaps<cr>", desc = "Find keymaps" },
+			{ "<Leader>ft", "<cmd>Telescope tags<cr>", desc = "Find tags" },
 		},
 		config = function()
 			local actions = require("telescope.actions")
