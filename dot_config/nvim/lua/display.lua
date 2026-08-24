@@ -1,12 +1,10 @@
-local config = require("config")
-
-config.option("background", "dark")
+vim.o.background = "dark"
 vim.cmd("silent! colorscheme dracula")
 
 -- show matching brackets/etc
-config.option("showmatch", true)
+vim.o.showmatch = true
 -- show filename in title string
-config.option("title", true)
+vim.o.title = true
 
 -- tmux fix (don't ask me, ask stack overflow)
 vim.cmd([[
@@ -15,9 +13,9 @@ let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
 ]])
 
 -- always show at least 7 lines around the cursor
-config.option("scrolloff", 7)
+vim.o.scrolloff = 7
 
 -- show whitespace by default
-config.option("list", true)
+vim.o.list = true
 local whitespacechars = "tab:▸ ,trail:•,precedes:«,extends:»"
-config.option("listchars", whitespacechars)
+vim.o.listchars = whitespacechars

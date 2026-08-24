@@ -3,6 +3,32 @@ return {
 	"folke/snacks.nvim",
 	priority = 1000,
 	lazy = false,
+	keys = {
+		{ "<Leader>t", function() Snacks.terminal.toggle() end, desc = "Toggle terminal" },
+		{ "<Leader>z", function() Snacks.scratch() end, desc = "Toggle scratch buffer" },
+		-- <Leader>g* terminal helpers: the plain Git commands (b/d/l/s)
+		-- live on the vim-fugitive spec instead.
+		{ "<Leader>go", function() Snacks.gitbrowse() end, desc = "Git browse" },
+		{
+			"<Leader>gp",
+			-- Runs through an interactive shell (-ic) so aliases like `gp`
+			-- resolve. A second, distinct Snacks terminal (count = 2) keeps
+			-- this separate from the plain <Leader>t shell - terminal
+			-- identity is based on cmd/cwd/env/count, see docs/terminal.md.
+			function()
+				Snacks.terminal({ vim.o.shell, "-ic", "gp" }, { count = 2, auto_close = false })
+			end,
+			desc = "Git push (gp alias)",
+		},
+		{ "<Leader>gt", function() Snacks.terminal.toggle(nil, { count = 2 }) end, desc = "Git terminal" },
+		{
+			"<Leader>gu",
+			function()
+				Snacks.terminal({ vim.o.shell, "-ic", "git-smart-sync" }, { count = 2, auto_close = false })
+			end,
+			desc = "git-smart-sync",
+		},
+	},
 	---@type snacks.Config
 	opts = {
 		bigfile = { enabled = true },

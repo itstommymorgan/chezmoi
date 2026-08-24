@@ -101,6 +101,15 @@ return {
 			"nvim-tree/nvim-web-devicons",
 			{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
 		},
+		keys = {
+			{ "<Leader>f<Leader>", "<cmd>Telescope grep_string<cr>", desc = "Grep string under cursor" },
+			{ "<Leader>fb", "<cmd>Telescope buffers theme=ivy<cr>", desc = "Buffers" },
+			{ "<Leader>ff", "<cmd>Telescope find_files theme=ivy<cr>", desc = "Find files" },
+			{ "<Leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
+			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Help tags" },
+			{ "<Leader>fm", "<cmd>Telescope keymaps<cr>", desc = "Keymaps" },
+			{ "<Leader>ft", "<cmd>Telescope tags<cr>", desc = "Tags" },
+		},
 		config = function()
 			local actions = require("telescope.actions")
 			local trouble = require("trouble.sources.telescope")

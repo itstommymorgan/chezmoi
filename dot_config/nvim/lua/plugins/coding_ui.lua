@@ -22,6 +22,15 @@ return {
 	{
 		"tpope/vim-fugitive",
 		dependencies = { "shumphrey/fugitive-gitlab.vim" },
+		-- <Leader>g* is the git chord prefix; the terminal-based half
+		-- (o/p/t/u) lives on the snacks.nvim spec instead, since those
+		-- call Snacks.terminal/gitbrowse rather than fugitive commands.
+		keys = {
+			{ "<Leader>gb", ":Git blame<CR>", mode = "", desc = "Git blame" },
+			{ "<Leader>gd", ":Gdiff<CR>", mode = "", desc = "Git diff" },
+			{ "<Leader>gl", ":Git log<CR>", mode = "", desc = "Git log" },
+			{ "<Leader>gs", ":Git<CR>", mode = "", desc = "Git status" },
+		},
 	},
 
 	-- rainbow delimiters
@@ -32,6 +41,10 @@ return {
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = true,
+		keys = {
+			{ "ge", ":Trouble diagnostics toggle<CR>", mode = "", desc = "Diagnostics (Trouble)" },
+			{ "gr", ":Trouble lsp_references toggle<CR>", mode = "", desc = "LSP references (Trouble)" },
+		},
 	},
 
 	-- better quickfix
