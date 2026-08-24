@@ -1,3 +1,6 @@
+# Ensure zsh-vi-mode doesn't break other things
+export ZVM_INIT_MODE=sourcing
+
 # Manage zplug with zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
