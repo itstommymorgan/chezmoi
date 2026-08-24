@@ -3,6 +3,11 @@ return {
 	"carlos-algms/agentic.nvim",
 	opts = {
 		provider = "claude-agent-acp", -- use for claude code
+		acp_providers = {
+			["claude-agent-acp"] = {
+				default_mode = "auto",
+			},
+		},
 	},
 	keys = {
 		{

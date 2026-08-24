@@ -5,15 +5,11 @@ local config = require("config")
 
 -- declare a variable for all the filetypes we want to exclude from various
 -- plugins
-vim.g.tm_special_buffers = { "neo-tree", "fzf", "FTerm", "dashboard" }
+vim.g.tm_special_buffers = { "neo-tree", "fzf", "snacks_terminal", "snacks_dashboard" }
 
 -- use <SPACE> for mapleader
 config.nmap("<Space>", "")
 vim.g.mapleader = " "
-
--- For some modes (e.g. terminal) <Space> won't work as a leader, so let's
--- define <C-Space> to be our localleader
-vim.g.maplocalleader = "jk"
 
 -- Please don't abandon my poor buffers
 config.option("hidden", true)

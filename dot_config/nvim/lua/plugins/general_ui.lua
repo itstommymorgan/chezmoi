@@ -53,15 +53,6 @@ return {
 	-- the theme
 	{ "dracula/vim", as = "dracula" },
 
-	-- dashboard
-	"glepnir/dashboard-nvim",
-
-	-- smooth scrolling operations
-	{
-		"karb94/neoscroll.nvim",
-		config = true,
-	},
-
 	-- file tree browser window
 	{
 		"nvim-neo-tree/neo-tree.nvim",
@@ -75,19 +66,31 @@ return {
 			"MunifTanjim/nui.nvim",
 			"nvim-tree/nvim-web-devicons",
 		},
-		opts = {
-			filesystem = {
+		opts = function(_, opts)
+			opts.filesystem = {
 				filtered_items = {
 					hide_dotfiles = false,
 					never_show = { ".git" },
 				},
-			},
-			window = {
+			}
+			opts.window = {
 				mappings = {
 					["-"] = "close_window",
 				},
-			},
-		},
+			}
+
+			-- Keeps LSP-tracked imports in sync when files are moved/renamed
+			-- from the neo-tree file tree.
+			local function on_move(data)
+				Snacks.rename.on_rename_file(data.source, data.destination)
+			end
+			local events = require("neo-tree.events")
+			opts.event_handlers = opts.event_handlers or {}
+			vim.list_extend(opts.event_handlers, {
+				{ event = events.FILE_MOVED, handler = on_move },
+				{ event = events.FILE_RENAMED, handler = on_move },
+			})
+		end,
 	},
 
 	-- fuzzy finder over lists
@@ -140,4 +143,17 @@ return {
 
 	-- try to hide ansi escape codes
 	"powerman/vim-plugin-AnsiEsc",
+
+	-- render markdown (headings, code blocks, tables, etc.) in-buffer
+	{
+		"MeanderingProgrammer/render-markdown.nvim",
+		ft = { "markdown" },
+		dependencies = {
+			"nvim-treesitter/nvim-treesitter",
+			"nvim-tree/nvim-web-devicons",
+		},
+		---@module "render-markdown"
+		---@type render.md.UserConfig
+		opts = {},
+	},
 }

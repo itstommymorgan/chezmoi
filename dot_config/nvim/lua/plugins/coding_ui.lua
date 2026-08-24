@@ -18,32 +18,14 @@ return {
 		opts = {},
 	},
 
-	-- Floating terminal windows
-	"numToStr/FTerm.nvim",
-
 	-- Git plugin
 	{
 		"tpope/vim-fugitive",
 		dependencies = { "shumphrey/fugitive-gitlab.vim" },
 	},
 
-	-- Enables :GBrowse, autocomplete, etc. to pull from GitHub.
-	"tpope/vim-rhubarb",
-
 	-- rainbow delimiters
 	"HiPhish/rainbow-delimiters.nvim",
-
-	-- show indentation guidelines
-	{
-		"lukas-reineke/indent-blankline.nvim",
-		main = "ibl",
-		opts = {},
-		---@module "ibl"
-		---@type ibl.config
-		config = function()
-			require("ibl").setup()
-		end,
-	},
 
 	-- pretty list
 	{

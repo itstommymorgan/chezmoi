@@ -50,8 +50,7 @@ for count = 1, #search_keys do
 	config.nmap(key, key .. "zz", { silent = true, noremap = false })
 end
 
-require("keybindings.dashboard")
-require("keybindings.fterm")
 require("keybindings.fugitive")
+require("keybindings.snacks")
 require("keybindings.telescope")
 require("keybindings.trouble")
