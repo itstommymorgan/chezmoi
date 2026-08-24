@@ -1,3 +1,4 @@
 **/tags
+**/.claude/settings.local.json
 config/definitions.rb
 .tmuxinator.yml
