@@ -1,4 +1,4 @@
-require("config")
+local config = require("config")
 
 config.option("background", "dark")
 vim.cmd("silent! colorscheme dracula")

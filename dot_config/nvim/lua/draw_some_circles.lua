@@ -1,7 +1,7 @@
 -- This file will always be first in my nvim config, so anything that needs to
 -- be done before ANYTHING else (or otherwise really basic setup) goes here.
 
-config = require("config")
+local config = require("config")
 
 -- declare a variable for all the filetypes we want to exclude from various
 -- plugins

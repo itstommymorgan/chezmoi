@@ -1,3 +1,5 @@
+local config = require("config")
+
 -- <Leader><Leader> is a shortcut for commands
 config.nmap("<Leader><Leader>", ":")
 
