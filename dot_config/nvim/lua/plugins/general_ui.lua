@@ -53,13 +53,6 @@ return {
 	-- the theme
 	{ "dracula/vim", as = "dracula" },
 
-	-- pretty list
-	{
-		"folke/trouble.nvim",
-		dependencies = { "nvim-tree/nvim-web-devicons" },
-		config = true,
-	},
-
 	-- dashboard
 	"glepnir/dashboard-nvim",
 

@@ -5,43 +5,39 @@
 -- 2) Plugins that add or modify operators, which perform operations against
 --    text objects/selections
 return {
-  -- allows for splitting and joining multiline statements
-  'AndrewRadev/splitjoin.vim',
+	-- allows for splitting and joining multiline statements
+	"AndrewRadev/splitjoin.vim",
 
-  --improves on matchit, adding a lot of text objects and some logic.
-  'andymass/vim-matchup',
+	-- provide a shortcut for sorting text in a motion/textobj
+	"christoomey/vim-sort-motion",
 
-  -- provide a shortcut for sorting text in a motion/textobj
-  'christoomey/vim-sort-motion',
+	-- provide text objects for comments
+	{
+		"glts/vim-textobj-comment",
+		dependencies = { "kana/vim-textobj-user" },
+	},
 
-  -- provide text objects for comments
-  {
-    'glts/vim-textobj-comment',
-    dependencies = { 'kana/vim-textobj-user' }
-  },
+	-- provide text objects for indents
+	{
+		"kana/vim-textobj-indent",
+		dependencies = { "kana/vim-textobj-user" },
+	},
 
-  -- provide text objects for indents
-  {
-    'kana/vim-textobj-indent',
-    dependencies = { 'kana/vim-textobj-user' }
-  },
+	-- provide text objects for lines
+	{
+		"kana/vim-textobj-line",
+		dependencies = { "kana/vim-textobj-user" },
+	},
 
-  -- provide text objects for lines
-  {
-    'kana/vim-textobj-line',
-    dependencies = { 'kana/vim-textobj-user' }
-  },
+	-- Provide operators for commenting code.
+	"tpope/vim-commentary",
 
-  -- Provide operators for commenting code.
-  'tpope/vim-commentary',
+	-- Allow custom commands to be repeated
+	"tpope/vim-repeat",
 
-  -- Allow custom commands to be repeated
-  'tpope/vim-repeat',
+	-- Enables operators for manipulating surrounding punctuations
+	"tpope/vim-surround",
 
-  -- Enables operators for manipulating surrounding punctuations
-  'tpope/vim-surround',
-
-  -- allow for a broader range of text objects
-  'wellle/targets.vim',
-
+	-- allow for a broader range of text objects
+	"wellle/targets.vim",
 }
