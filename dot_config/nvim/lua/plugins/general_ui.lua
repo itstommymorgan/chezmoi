@@ -5,6 +5,7 @@ return {
 	-- statusline
 	{
 		"nvim-lualine/lualine.nvim",
+		event = "VeryLazy",
 		dependencies = { "nvim-tree/nvim-web-devicons", "SmiteshP/nvim-navic" },
 		opts = {
 			options = {
@@ -48,10 +49,11 @@ return {
 	},
 
 	--improves on matchit, adding a lot of text objects and some logic.
-	"andymass/vim-matchup",
+	{ "andymass/vim-matchup", event = { "BufReadPost", "BufNewFile" } },
 
-	-- the theme
-	{ "dracula/vim", as = "dracula" },
+	-- the theme - loaded eagerly since display.lua sets it as the
+	-- colorscheme before lazy.nvim would ever fire a lazy trigger
+	{ "dracula/vim", name = "dracula", lazy = false, priority = 1000 },
 
 	-- file tree browser window
 	{
@@ -148,11 +150,15 @@ return {
 		end,
 	},
 
-	-- native FZF impl for Telescope
-	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make" },
+	-- native FZF impl for Telescope. Declared as a top-level spec (in
+	-- addition to being nested under telescope's own `dependencies`)
+	-- because lazy.nvim only runs `build` hooks for top-level specs;
+	-- `lazy = true` keeps it from independently forcing an eager load -
+	-- it still loads whenever telescope does.
+	{ "nvim-telescope/telescope-fzf-native.nvim", build = "make", lazy = true },
 
 	-- try to hide ansi escape codes
-	"powerman/vim-plugin-AnsiEsc",
+	{ "powerman/vim-plugin-AnsiEsc", cmd = "AnsiEsc" },
 
 	-- render markdown (headings, code blocks, tables, etc.) in-buffer
 	{

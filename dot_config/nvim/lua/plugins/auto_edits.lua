@@ -2,11 +2,12 @@
 -- automatic edits (or other operations like ctags generation) based on context. Programmer's little helpers.
 return {
 	-- keep HTML tags in sync
-	"AndrewRadev/tagalong.vim",
+	{ "AndrewRadev/tagalong.vim", event = "InsertEnter" },
 
 	-- automatically create matching pairs
 	{
 		"windwp/nvim-autopairs",
+		event = "InsertEnter",
 		dependencies = { "nvim-treesitter" },
 		config = function()
 			require("nvim-autopairs").setup({})
@@ -16,6 +17,7 @@ return {
 	-- autogenerate tagfiles
 	{
 		"ludovicchabant/vim-gutentags",
+		event = { "BufReadPost", "BufWritePost" },
 		config = function()
 			-- use a temp folder for storing tags
 			local tags_cache_dir = vim.fn.stdpath("cache") .. "/tags"
@@ -25,5 +27,5 @@ return {
 	},
 
 	-- Automatically add 'end' statements as appropriate
-	"tpope/vim-endwise",
+	{ "tpope/vim-endwise", event = "InsertEnter" },
 }

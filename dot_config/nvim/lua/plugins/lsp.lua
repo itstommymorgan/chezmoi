@@ -1,4 +1,4 @@
--- This file contains configuration flazyor all lsp-related plugins.
+-- This file contains configuration for all lsp-related plugins.
 
 return {
   -- LSP config
@@ -14,6 +14,7 @@ return {
   -- LSP signature completion support
   {
     'ray-x/lsp_signature.nvim',
+    event = "LspAttach",
     config = true,
   },
 }

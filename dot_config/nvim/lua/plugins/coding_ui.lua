@@ -11,6 +11,7 @@ return {
 	-- git signs in the gutter
 	{
 		"lewis6991/gitsigns.nvim",
+		event = { "BufReadPre", "BufNewFile" },
 		dependencies = {
 			"nvim-lua/plenary.nvim",
 		},
@@ -35,7 +36,7 @@ return {
 	},
 
 	-- rainbow delimiters
-	"HiPhish/rainbow-delimiters.nvim",
+	{ "HiPhish/rainbow-delimiters.nvim", event = { "BufReadPost", "BufNewFile" } },
 
 	-- pretty list
 	{
@@ -75,6 +76,7 @@ return {
 	-- Navigation breadcrumbs (for lualine)
 	{
 		"SmiteshP/nvim-navic",
+		event = "LspAttach",
 		dependencies = { "neovim/nvim-lspconfig" },
 		config = function()
 			local navic = require("nvim-navic")

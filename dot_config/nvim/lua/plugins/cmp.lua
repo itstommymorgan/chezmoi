@@ -1,6 +1,7 @@
 return {
 	{
 		"saghen/blink.cmp",
+		event = "InsertEnter",
 		dependencies = { "rafamadriz/friendly-snippets", "Kaiser-Yang/blink-cmp-git" },
 
 		version = "1.*", --force v1 while v2 is in heavy dev
