@@ -1,9 +1,12 @@
--- support chezmoi dot_* files like they are the actual files
 vim.filetype.add({
   pattern = {
+    -- support chezmoi dot_* files like they are the actual files
     [".*/dot_(.+)"] = function(path, bufnr, name)
       return vim.filetype.match({ filename = "." .. name })
     end,
+    -- hammerspoon's own config template; *.json.defaults isn't recognized
+    -- by Neovim's *.json extension matching
+    [".*%.json%.defaults"] = "json",
   },
 })
 
