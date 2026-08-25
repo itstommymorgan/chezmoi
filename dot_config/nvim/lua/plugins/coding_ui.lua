@@ -22,7 +22,6 @@ return {
 	-- Git plugin
 	{
 		"tpope/vim-fugitive",
-		dependencies = { "shumphrey/fugitive-gitlab.vim" },
 		-- <Leader>g* is the git chord prefix; the terminal-based half
 		-- (o/p/t/u) lives on the snacks.nvim spec instead, since those
 		-- call Snacks.terminal/gitbrowse rather than fugitive commands.
