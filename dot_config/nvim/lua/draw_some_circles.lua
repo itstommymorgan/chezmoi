@@ -9,6 +9,10 @@ vim.g.tm_special_buffers = { "neo-tree", "fzf", "snacks_terminal", "snacks_dashb
 vim.keymap.set("n", "<Space>", "<Nop>")
 vim.g.mapleader = " "
 
+-- use , for maplocalleader (buffer/filetype-scoped mappings, e.g.
+-- grug-far's own in-buffer keymaps)
+vim.g.maplocalleader = ","
+
 -- Please don't abandon my poor buffers
 vim.o.hidden = true
 
