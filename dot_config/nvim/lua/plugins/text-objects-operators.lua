@@ -48,16 +48,42 @@ return {
 		dependencies = { "kana/vim-textobj-user" },
 	},
 
-	-- provide text objects for indents
+	-- indentation (ii/ai) and current-line-characterwise (i_/a_) text
+	-- objects - replaces kana/vim-textobj-indent and kana/vim-textobj-line.
+	-- vim-textobj-line's old il/al keys aren't reused here: mini.ai above
+	-- claims il/al itself for its "inside/around last" next/last-match
+	-- modifiers (e.g. `dil)` = delete inside last paren), and that's worth
+	-- keeping intact rather than overriding for this comparatively minor
+	-- object.
 	{
-		"kana/vim-textobj-indent",
-		dependencies = { "kana/vim-textobj-user" },
-	},
-
-	-- provide text objects for lines
-	{
-		"kana/vim-textobj-line",
-		dependencies = { "kana/vim-textobj-user" },
+		"chrisgrieser/nvim-various-textobjs",
+		keys = {
+			{
+				"ii",
+				'<cmd>lua require("various-textobjs").indentation("inner", "inner")<CR>',
+				mode = { "x", "o" },
+				desc = "Inner indentation",
+			},
+			{
+				"ai",
+				'<cmd>lua require("various-textobjs").indentation("outer", "inner")<CR>',
+				mode = { "x", "o" },
+				desc = "Around indentation",
+			},
+			{
+				"i_",
+				'<cmd>lua require("various-textobjs").lineCharacterwise("inner")<CR>',
+				mode = { "x", "o" },
+				desc = "Inner line",
+			},
+			{
+				"a_",
+				'<cmd>lua require("various-textobjs").lineCharacterwise("outer")<CR>',
+				mode = { "x", "o" },
+				desc = "Around line",
+			},
+		},
+		opts = {},
 	},
 
 	-- sets `commentstring` based on treesitter injections at the cursor,
