@@ -48,9 +48,7 @@ return {
 	keys = {
 		{ "<Leader>t", function() Snacks.terminal.toggle() end, desc = "Toggle terminal" },
 		{ "<Leader>z", function() Snacks.scratch() end, desc = "Toggle scratch buffer" },
-		-- cycle through other references of the word under the cursor
-		-- (words.enabled highlights them); joins the gr* "goto LSP
-		-- request" family core already binds (grn/gra/grr/gri/grt/grd/...)
+		-- extends the gr* convention rather than a bracket motion
 		{ "grw", function() Snacks.words.jump(1, true) end, desc = "Next reference (words)" },
 		{ "grW", function() Snacks.words.jump(-1, true) end, desc = "Prev reference (words)" },
 		-- <Leader>g* terminal helpers: the plain Git commands (b/d/l/s)

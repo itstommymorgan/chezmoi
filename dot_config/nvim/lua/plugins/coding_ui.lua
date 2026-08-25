@@ -61,14 +61,8 @@ return {
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
 		config = true,
-		-- <Leader>p ("Project"): workspace-scoped LSP lists, alongside
-		-- <Leader>f (Telescope search) and <Leader>g (git) as the other
-		-- whole-repo-scoped groups. Not g*: these toggle a persistent list
-		-- panel rather than jumping to a location, so they don't belong in
-		-- the gr* "goto LSP request" family. (Previously ge/gr with
-		-- mode = "", which also clobbered vanilla ge/gr in visual/
-		-- operator-pending/select mode - dropping mode entirely defaults to
-		-- normal-mode-only.)
+		-- toggles a list panel rather than jumping to a location, so it's
+		-- kept out of the gr* family
 		keys = {
 			{ "<Leader>p", nil, desc = "Project" },
 			{ "<Leader>pd", ":Trouble diagnostics toggle<CR>", desc = "Diagnostics (Trouble)" },

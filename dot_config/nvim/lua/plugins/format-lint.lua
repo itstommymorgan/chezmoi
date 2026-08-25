@@ -21,10 +21,8 @@ return {
     event = { 'BufReadPost', 'BufWritePost' },
     config = function()
       local lint = require('lint')
-      -- markdownlint-cli2 is invoked over stdin (no file path), so its
-      -- automatic config discovery only ever checks $PWD, never an
-      -- ancestor directory - it would silently miss ~/.markdownlint-cli2.jsonc
-      -- for any file not directly in $HOME. Point it there explicitly instead.
+      -- reads stdin, so its config discovery only checks $PWD, not
+      -- ancestors - point it at ours directly
       lint.linters['markdownlint-cli2'].args = {
         '--config', vim.fn.expand('~/.markdownlint-cli2.jsonc'),
         '-',
