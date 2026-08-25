@@ -8,28 +8,34 @@ return {
 	-- allows for splitting and joining multiline statements
 	-- (treesitter-based; replaces splitjoin.vim). Default keymaps collide
 	-- with existing binds (<Leader>m is harpoon, j/s are window-nav/split),
-	-- so they're remapped under a dedicated <Leader>J prefix instead.
+	-- so they're remapped under a dedicated <Leader>x prefix instead. (An
+	-- earlier version of this used <Leader>J, which turned out to still
+	-- collide with window-nav's own real <Leader>J mapping - lazy.nvim's
+	-- `keys` group-label entries with a nil action don't register an
+	-- actual keymap, they're purely which-key display metadata, so the
+	-- pre-existing binding was still live underneath and made <Leader>J
+	-- ambiguous.)
 	{
 		"Wansmer/treesj",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
 		keys = {
-			{ "<Leader>J", nil, desc = "Split/Join" },
+			{ "<Leader>x", nil, desc = "Split/Join" },
 			{
-				"<Leader>Jm",
+				"<Leader>xm",
 				function()
 					require("treesj").toggle()
 				end,
 				desc = "Toggle split/join",
 			},
 			{
-				"<Leader>Jj",
+				"<Leader>xj",
 				function()
 					require("treesj").join()
 				end,
 				desc = "Join",
 			},
 			{
-				"<Leader>Js",
+				"<Leader>xs",
 				function()
 					require("treesj").split()
 				end,
