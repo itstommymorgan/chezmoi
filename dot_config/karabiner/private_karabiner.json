@@ -21,7 +21,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Change right_command to command+control+option+shift.",
+                                "description": "Change right_command to command+control+option+shift if pressed with other keys, toggle mic mute if pressed alone.",
                                 "from": {
                                     "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
@@ -32,7 +32,14 @@
                                         "modifiers": ["left_command", "left_control", "left_option"]
                                     }
                                 ],
-                                "type": "basic"
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "spacebar",
+                                        "modifiers": ["left_command", "left_control", "left_option", "left_shift"]
+                                    }
+                                ],
+                                "type": "basic",
+                                "parameters": { "basic.to_if_alone_timeout_milliseconds": 200 }
                             }
                         ]
                     },
