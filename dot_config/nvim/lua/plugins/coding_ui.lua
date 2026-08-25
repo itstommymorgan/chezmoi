@@ -26,12 +26,33 @@ return {
 		-- <Leader>g* is the git chord prefix; the terminal-based half
 		-- (o/p/t/u) lives on the snacks.nvim spec instead, since those
 		-- call Snacks.terminal/gitbrowse rather than fugitive commands.
+		-- gd/gh are diffview.nvim below, not fugitive.
 		keys = {
 			{ "<Leader>g", nil, desc = "Git" },
 			{ "<Leader>gb", ":Git blame<CR>", mode = "", desc = "Git blame" },
-			{ "<Leader>gd", ":Gdiff<CR>", mode = "", desc = "Git diff" },
+			{ "<Leader>gD", ":Gdiff<CR>", mode = "", desc = "Git diff (current buffer)" },
 			{ "<Leader>gl", ":Git log<CR>", mode = "", desc = "Git log" },
 			{ "<Leader>gs", ":Git<CR>", mode = "", desc = "Git status" },
+		},
+	},
+
+	-- whole-changeset diff/merge/history viewer: a file panel across every
+	-- changed file, vs. fugitive's single-buffer :Gdiff (<Leader>gD above)
+	{
+		"sindrets/diffview.nvim",
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = {
+			"DiffviewOpen",
+			"DiffviewClose",
+			"DiffviewFileHistory",
+			"DiffviewToggleFiles",
+			"DiffviewFocusFiles",
+			"DiffviewRefresh",
+		},
+		opts = {},
+		keys = {
+			{ "<Leader>gd", ":DiffviewOpen<CR>", mode = "", desc = "Diff all changes" },
+			{ "<Leader>gh", ":DiffviewFileHistory %<CR>", mode = "", desc = "File history" },
 		},
 	},
 
