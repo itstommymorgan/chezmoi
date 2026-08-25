@@ -25,7 +25,9 @@ end
 vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave" }, {
   group = number_toggle,
   callback = function()
-    if is_excluded() then return end
+    if is_excluded() then
+      return
+    end
     vim.opt_local.relativenumber = false
   end,
 })
@@ -34,7 +36,9 @@ vim.api.nvim_create_autocmd({ "BufLeave", "FocusLost", "InsertEnter", "WinLeave"
 vim.api.nvim_create_autocmd({ "BufEnter", "FocusGained", "InsertLeave", "WinEnter" }, {
   group = number_toggle,
   callback = function()
-    if is_excluded() then return end
+    if is_excluded() then
+      return
+    end
     if vim.api.nvim_get_mode().mode ~= "i" then
       vim.opt_local.relativenumber = true
     end

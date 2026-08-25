@@ -1,7 +1,9 @@
 return {
   {
     "mason-org/mason.nvim",
-    config = function() require("mason").setup() end,
+    config = function()
+      require("mason").setup()
+    end,
   },
   {
     "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -33,6 +35,6 @@ return {
     dependencies = {
       "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",
-    }
+    },
   },
 }

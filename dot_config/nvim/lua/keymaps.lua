@@ -13,8 +13,8 @@ vim.keymap.set("", "<Leader>Q", ":qa!<CR>", { desc = "Quit all windows" })
 -- <Leader>h/j/k/l navigates windows
 local window_keys = { "h", "j", "k", "l", "H", "J", "K", "L" }
 for count = 1, #window_keys do
-	local key = window_keys[count]
-	vim.keymap.set("", "<Leader>" .. key, "<C-W>" .. key, { desc = "Window " .. key })
+  local key = window_keys[count]
+  vim.keymap.set("", "<Leader>" .. key, "<C-W>" .. key, { desc = "Window " .. key })
 end
 
 -- use <Leader>s for vertical split, <Leader>S for horizontal split
@@ -44,6 +44,6 @@ vim.keymap.set("n", "<C-Space><C-Space>", ":nohls<CR>", { silent = true, desc = 
 --  keep search results in the center of the screen
 local search_keys = { "n", "N", "*", "#", "g*", "g#" }
 for count = 1, #search_keys do
-	local key = search_keys[count]
-	vim.keymap.set("n", key, key .. "zz", { silent = true, remap = true })
+  local key = search_keys[count]
+  vim.keymap.set("n", key, key .. "zz", { silent = true, remap = true })
 end

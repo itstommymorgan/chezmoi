@@ -1,6 +1,6 @@
 return {
   {
-    'stevearc/conform.nvim',
+    "stevearc/conform.nvim",
     event = "BufWritePre",
     opts = {
       formatters_by_ft = {
@@ -22,22 +22,25 @@ return {
   },
 
   {
-    'mfussenegger/nvim-lint',
-    event = { 'BufReadPost', 'BufWritePost' },
+    "mfussenegger/nvim-lint",
+    event = { "BufReadPost", "BufWritePost" },
     config = function()
-      local lint = require('lint')
+      local lint = require("lint")
       -- reads stdin, so its config discovery only checks $PWD, not
       -- ancestors - point it at ours directly
-      lint.linters['markdownlint-cli2'].args = {
-        '--config', vim.fn.expand('~/.markdownlint-cli2.jsonc'),
-        '-',
+      lint.linters["markdownlint-cli2"].args = {
+        "--config",
+        vim.fn.expand("~/.markdownlint-cli2.jsonc"),
+        "-",
       }
       lint.linters_by_ft = {
-        sh = { 'shellcheck' },
-        markdown = { 'markdownlint-cli2' },
+        sh = { "shellcheck" },
+        markdown = { "markdownlint-cli2" },
       }
-      vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
-        callback = function() lint.try_lint() end,
+      vim.api.nvim_create_autocmd({ "BufWritePost" }, {
+        callback = function()
+          lint.try_lint()
+        end,
       })
     end,
   },

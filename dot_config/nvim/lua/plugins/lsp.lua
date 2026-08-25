@@ -3,7 +3,7 @@
 return {
   -- LSP config
   {
-    'neovim/nvim-lspconfig',
+    "neovim/nvim-lspconfig",
     dependencies = {
       "mason-org/mason.nvim",
       "WhoIsSethDaniel/mason-tool-installer.nvim",
@@ -12,11 +12,11 @@ return {
       -- surface LSP progress (indexing, installs, etc.) as notifications
       -- instead of nowhere; recipe from snacks.nvim's own notifier docs
       local progress = vim.defaulttable()
-      vim.api.nvim_create_autocmd('LspProgress', {
+      vim.api.nvim_create_autocmd("LspProgress", {
         callback = function(ev)
           local client = vim.lsp.get_client_by_id(ev.data.client_id)
           local value = ev.data.params.value
-          if not client or type(value) ~= 'table' then
+          if not client or type(value) ~= "table" then
             return
           end
           local p = progress[client.id]
@@ -25,12 +25,12 @@ return {
             if i == #p + 1 or p[i].token == ev.data.params.token then
               p[i] = {
                 token = ev.data.params.token,
-                msg = ('[%3d%%] %s%s'):format(
-                  value.kind == 'end' and 100 or value.percentage or 100,
-                  value.title or '',
-                  value.message and (' **%s**'):format(value.message) or ''
+                msg = ("[%3d%%] %s%s"):format(
+                  value.kind == "end" and 100 or value.percentage or 100,
+                  value.title or "",
+                  value.message and (" **%s**"):format(value.message) or ""
                 ),
-                done = value.kind == 'end',
+                done = value.kind == "end",
               }
               break
             end
@@ -41,12 +41,12 @@ return {
             return table.insert(msg, v.msg) or not v.done
           end, p)
 
-          local spinner = { '⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏' }
-          vim.notify(table.concat(msg, '\n'), 'info', {
-            id = 'lsp_progress',
+          local spinner = { "⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏" }
+          vim.notify(table.concat(msg, "\n"), "info", {
+            id = "lsp_progress",
             title = client.name,
             opts = function(notif)
-              notif.icon = #progress[client.id] == 0 and ' '
+              notif.icon = #progress[client.id] == 0 and " "
                 or spinner[math.floor(vim.uv.hrtime() / (1e6 * 80)) % #spinner + 1]
             end,
           })
@@ -55,7 +55,7 @@ return {
 
       -- core leaves definition/declaration/call-hierarchy unbound; extend
       -- the same gr* convention to cover them
-      vim.api.nvim_create_autocmd('LspAttach', {
+      vim.api.nvim_create_autocmd("LspAttach", {
         callback = function(args)
           local client = vim.lsp.get_client_by_id(args.data.client_id)
           if not client then
@@ -65,19 +65,23 @@ return {
           local caps = client.server_capabilities
 
           if caps.definitionProvider then
-            vim.keymap.set('n', 'grd', vim.lsp.buf.definition, { buffer = buf, desc = 'vim.lsp.buf.definition()' })
+            vim.keymap.set("n", "grd", vim.lsp.buf.definition, { buffer = buf, desc = "vim.lsp.buf.definition()" })
           end
           if caps.declarationProvider then
-            vim.keymap.set('n', 'grD', vim.lsp.buf.declaration, { buffer = buf, desc = 'vim.lsp.buf.declaration()' })
+            vim.keymap.set("n", "grD", vim.lsp.buf.declaration, { buffer = buf, desc = "vim.lsp.buf.declaration()" })
           end
           if caps.callHierarchyProvider then
             vim.keymap.set(
-              'n', 'grc', vim.lsp.buf.incoming_calls,
-              { buffer = buf, desc = 'vim.lsp.buf.incoming_calls()' }
+              "n",
+              "grc",
+              vim.lsp.buf.incoming_calls,
+              { buffer = buf, desc = "vim.lsp.buf.incoming_calls()" }
             )
             vim.keymap.set(
-              'n', 'gro', vim.lsp.buf.outgoing_calls,
-              { buffer = buf, desc = 'vim.lsp.buf.outgoing_calls()' }
+              "n",
+              "gro",
+              vim.lsp.buf.outgoing_calls,
+              { buffer = buf, desc = "vim.lsp.buf.outgoing_calls()" }
             )
           end
         end,
@@ -85,14 +89,13 @@ return {
     end,
   },
 
-
   -- LSP signature completion support
   {
-    'ray-x/lsp_signature.nvim',
+    "ray-x/lsp_signature.nvim",
     event = "LspAttach",
     config = true,
   },
 
   -- JSON schema catalog, consumed by after/lsp/jsonls.lua
-  { 'b0o/SchemaStore.nvim', lazy = true },
+  { "b0o/SchemaStore.nvim", lazy = true },
 }
