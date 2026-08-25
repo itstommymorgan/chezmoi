@@ -35,8 +35,14 @@ return {
 	-- Allow custom commands to be repeated
 	"tpope/vim-repeat",
 
-	-- Enables operators for manipulating surrounding punctuations
-	"tpope/vim-surround",
+	-- Enables operators for manipulating surrounding punctuations (ys/ds/cs,
+	-- S/gS in visual mode, <C-g>s in insert mode - same defaults as
+	-- tpope/vim-surround, which this replaces)
+	{
+		"kylechui/nvim-surround",
+		event = { "BufReadPost", "BufNewFile" },
+		opts = {},
+	},
 
 	-- allow for a broader range of text objects
 	"wellle/targets.vim",
