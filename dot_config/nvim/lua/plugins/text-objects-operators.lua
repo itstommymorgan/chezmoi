@@ -42,10 +42,33 @@ return {
 	-- provide a shortcut for sorting text in a motion/textobj
 	"christoomey/vim-sort-motion",
 
-	-- provide text objects for comments
+	-- comment text objects (ic/ac), treesitter-based - replaces
+	-- glts/vim-textobj-comment. No default keymaps in this plugin's newer
+	-- API; @comment.inner isn't defined for every language's query file,
+	-- but falls back gracefully rather than erroring when missing.
 	{
-		"glts/vim-textobj-comment",
-		dependencies = { "kana/vim-textobj-user" },
+		"nvim-treesitter/nvim-treesitter-textobjects",
+		branch = "main",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		keys = {
+			{
+				"ic",
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@comment.inner", "textobjects")
+				end,
+				mode = { "x", "o" },
+				desc = "Inner comment",
+			},
+			{
+				"ac",
+				function()
+					require("nvim-treesitter-textobjects.select").select_textobject("@comment.outer", "textobjects")
+				end,
+				mode = { "x", "o" },
+				desc = "Around comment",
+			},
+		},
+		opts = {},
 	},
 
 	-- indentation (ii/ai) and current-line-characterwise (i_/a_) text
