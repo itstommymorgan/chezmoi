@@ -13,15 +13,15 @@ end
 
 function ext.utils.meetings.in_meeting()
   ext.utils.meetings.notify("ON")
-  hs.execute('osascript -e \'tell application "Spotify" to pause\'')
+  hs.execute("osascript -e 'tell application \"Spotify\" to pause'")
 end
 
 function ext.utils.meetings.out_of_meeting()
   ext.utils.meetings.notify("OFF")
 end
 
-local wf_zoom_meeting = hs.window.filter.new('Zoom')
-wf_zoom_meeting:setAppFilter('zoom.us', { allowTitles ='Zoom Meeting' })
+local wf_zoom_meeting = hs.window.filter.new("Zoom")
+wf_zoom_meeting:setAppFilter("zoom.us", { allowTitles = "Zoom Meeting" })
 wf_zoom_meeting:subscribe(hs.window.filter.hasWindow, function()
   ext.utils.meetings.in_zoom_meeting = true
   ext.utils.meetings.in_meeting()

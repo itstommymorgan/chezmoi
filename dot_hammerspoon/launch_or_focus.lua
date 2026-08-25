@@ -1,7 +1,6 @@
 local originalApp = nil
 local toggledApp = nil
 
-
 function ext.app.centerMouseOnActiveWindow()
   local win = hs.window.focusedWindow()
   local rect = win:frame()
@@ -16,27 +15,31 @@ function ext.app.forceLaunchOrFocus(appName)
   hs.application.launchOrFocus(appName)
 
   -- clear timer if exists
-  if ext.cache.launchTimer then ext.cache.launchTimer:stop() end
+  if ext.cache.launchTimer then
+    ext.cache.launchTimer:stop()
+  end
 
   -- wait 500ms for window to appear and try hard to show the window
   ext.cache.launchTimer = hs.timer.doAfter(0.5, function()
-    local frontmostApp     = hs.application.frontmostApplication()
-    local frontmostWindows = hs.fnutils.filter(frontmostApp:allWindows(), function(win) return win:isStandard() end)
+    local frontmostApp = hs.application.frontmostApplication()
+    local frontmostWindows = hs.fnutils.filter(frontmostApp:allWindows(), function(win)
+      return win:isStandard()
+    end)
 
     -- break if this app is not frontmost (when/why?)
     if frontmostApp:title() ~= appName then
-      print('Expected app in front: ' .. appName .. ' got: ' .. frontmostApp:title())
+      print("Expected app in front: " .. appName .. " got: " .. frontmostApp:title())
       return
     end
 
     if #frontmostWindows == 0 then
       -- check if there's app name in window menu (Calendar, Messages, etc...)
-      if frontmostApp:findMenuItem({ 'Window', appName }) then
+      if frontmostApp:findMenuItem({ "Window", appName }) then
         -- select it, usually moves to space with this window
-        frontmostApp:selectMenuItem({ 'Window', appName })
+        frontmostApp:selectMenuItem({ "Window", appName })
       else
         -- otherwise send cmd-n to create new window
-        hs.eventtap.keyStroke({ 'cmd' }, 'n')
+        hs.eventtap.keyStroke({ "cmd" }, "n")
       end
     end
 
@@ -64,11 +67,13 @@ function ext.app.toggleLaunchOrFocus(appName)
   end
 end
 
-ext.app.appwatcher = hs.application.watcher.new(function(appName, event_type, app)
-  -- reset the toggled state if the application loses focus for some other
-  -- reason than the toggle function
-  if event_type == hs.application.watcher.deactivated and appName == toggledApp then
-    toggledApp = nil
-    originalApp = nil
-  end
-end):start()
+ext.app.appwatcher = hs.application.watcher
+  .new(function(appName, event_type, app)
+    -- reset the toggled state if the application loses focus for some other
+    -- reason than the toggle function
+    if event_type == hs.application.watcher.deactivated and appName == toggledApp then
+      toggledApp = nil
+      originalApp = nil
+    end
+  end)
+  :start()

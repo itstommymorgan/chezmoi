@@ -32,7 +32,7 @@ end
 function ext.utils.build_windowpaner_filters()
   hs.fnutils.each(ext.utils.windowpaner_config, function(entry)
     local appName = entry.app
-    local wf = hs.window.filter.new{appName}
+    local wf = hs.window.filter.new({ appName })
     wf:subscribe(hs.window.filter.hasWindow, function(window)
       ext.utils.windowpaner_relocate(window, entry.screen, entry.fullScreen)
     end)

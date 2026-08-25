@@ -18,7 +18,7 @@ function ext.app.detectChromeUrl(url, exact)
           for (var j = 0; j < tabs.length; j++) {
             var tab = tabs.at(j);
             rightTab = false;
-            if (]] .. exact ..[[) {
+            if (]] .. exact .. [[) {
               if (tab.url() == ']] .. url .. [[') {
                 rightTab = true;
               }
@@ -39,8 +39,8 @@ function ext.app.detectChromeUrl(url, exact)
 
       main();
     ]] .. '"')
-    result = string.gsub(result, '%s+', '')
-    if result == 'null' then
+    result = string.gsub(result, "%s+", "")
+    if result == "null" then
       return nil
     end
     return result:match("([^,]+),([^,]+)")
@@ -51,7 +51,6 @@ end
 -- either switch to the matched tab or create a new one with the specified URL
 -- if a tab doesn't already exist.
 function ext.app.forceLaunchOrOpenUrl(url, exact)
-
   return function()
     win, tab = ext.app.detectChromeUrl(url, exact)()
     ext.log:i("tab is " .. hs.inspect(tab))
@@ -68,9 +67,9 @@ function ext.app.forceLaunchOrOpenUrl(url, exact)
         }
 
         main();
-      ]] .. '"');
+      ]] .. '"')
     else
-      hs.execute('osascript -l JavaScript -e "' ..[[
+      hs.execute('osascript -l JavaScript -e "' .. [[
         function main() {
           var chrome = Application('Google Chrome');
           chrome.activate();
