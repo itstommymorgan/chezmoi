@@ -73,7 +73,7 @@ return {
 
 	-- indentation (ii/ai) and current-line-characterwise (i_/a_) text
 	-- objects - replaces kana/vim-textobj-indent and kana/vim-textobj-line.
-	-- vim-textobj-line's old il/al keys aren't reused here: mini.ai above
+	-- vim-textobj-line's old il/al keys aren't reused here: mini.ai below
 	-- claims il/al itself for its "inside/around last" next/last-match
 	-- modifiers (e.g. `dil)` = delete inside last paren), and that's worth
 	-- keeping intact rather than overriding for this comparatively minor
