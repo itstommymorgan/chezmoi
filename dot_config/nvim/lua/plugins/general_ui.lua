@@ -115,7 +115,10 @@ return {
 			{ "<Leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
 			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find help tags" },
 			{ "<Leader>fm", "<cmd>Telescope keymaps<cr>", desc = "Find keymaps" },
-			{ "<Leader>ft", "<cmd>Telescope tags<cr>", desc = "Find tags" },
+			-- LSP-backed replacement for the old ctags-based `Telescope
+			-- tags` (gutentags is gone); queries the attached language
+			-- server directly rather than a pre-built tags index.
+			{ "<Leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Find symbols (LSP)" },
 		},
 		config = function()
 			local actions = require("telescope.actions")
