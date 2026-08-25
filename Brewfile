@@ -23,6 +23,7 @@ brew "zsh"
 # --- GUI apps ---
 cask "1password"
 cask "1password-cli"
+cask "alt-tab"
 cask "beeper"
 cask "claude"
 cask "claude-code"

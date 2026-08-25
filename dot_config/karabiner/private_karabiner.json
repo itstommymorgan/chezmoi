@@ -21,7 +21,7 @@
                     {
                         "manipulators": [
                             {
-                                "description": "Change right_command to command+control+option+shift.",
+                                "description": "Change right_command to command+control+option+shift if pressed with other keys, toggle mic mute if pressed alone.",
                                 "from": {
                                     "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
@@ -32,6 +32,128 @@
                                         "modifiers": ["left_command", "left_control", "left_option"]
                                     }
                                 ],
+                                "to_if_alone": [
+                                    {
+                                        "key_code": "spacebar",
+                                        "modifiers": ["left_command", "left_control", "left_option", "left_shift"]
+                                    }
+                                ],
+                                "type": "basic",
+                                "parameters": { "basic.to_if_alone_timeout_milliseconds": 200 }
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change left_shift to ( and right_shift to ) when pressed alone.",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "left_shift",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "left_shift", "modifiers": ["left_shift"] }],
+                                "to_if_alone": [{ "key_code": "9", "modifiers": ["left_shift"] }],
+                                "type": "basic"
+                            },
+                            {
+                                "from": {
+                                    "key_code": "right_shift",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_shift", "modifiers": ["right_shift"] }],
+                                "to_if_alone": [{ "key_code": "0", "modifiers": ["right_shift"] }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "Change return_or_enter to right_option+right_control if pressed with other keys (arrow-key layer via h/j/k/l), return_or_enter if pressed alone.",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "return_or_enter",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "right_control", "modifiers": ["right_option"] }],
+                                "to_if_alone": [{ "key_code": "return_or_enter" }],
+                                "type": "basic",
+                                "parameters": { "basic.to_if_alone_timeout_milliseconds": 200 }
+                            },
+                            {
+                                "description": "Return-held + h = left_arrow",
+                                "from": {
+                                    "key_code": "h",
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
+                                },
+                                "to": [{ "key_code": "left_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Return-held + j = down_arrow",
+                                "from": {
+                                    "key_code": "j",
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
+                                },
+                                "to": [{ "key_code": "down_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Return-held + k = up_arrow",
+                                "from": {
+                                    "key_code": "k",
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
+                                },
+                                "to": [{ "key_code": "up_arrow" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "Return-held + l = right_arrow",
+                                "from": {
+                                    "key_code": "l",
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
+                                },
+                                "to": [{ "key_code": "right_arrow" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
+                        "description": "right_option + a/s/d/f = bracket layer ( [ { } ] ).",
+                        "manipulators": [
+                            {
+                                "description": "right_option+a = [",
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": { "mandatory": ["right_option"] }
+                                },
+                                "to": [{ "key_code": "open_bracket" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "right_option+s = {",
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": { "mandatory": ["right_option"] }
+                                },
+                                "to": [{ "key_code": "open_bracket", "modifiers": ["left_shift"] }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "right_option+d = }",
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": { "mandatory": ["right_option"] }
+                                },
+                                "to": [{ "key_code": "close_bracket", "modifiers": ["left_shift"] }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "right_option+f = ]",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": { "mandatory": ["right_option"] }
+                                },
+                                "to": [{ "key_code": "close_bracket" }],
                                 "type": "basic"
                             }
                         ]
