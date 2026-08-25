@@ -95,6 +95,14 @@ return {
 		opts = {},
 	},
 
-	-- allow for a broader range of text objects
-	"wellle/targets.vim",
+	-- extends a/i text objects with seek-forward and expand-outward
+	-- behavior for brackets/quotes/tag/argument/function-call, plus
+	-- explicit an/in/al/il next-/last-match modifiers (e.g. `di al)` =
+	-- delete around the previous paren) - replaces wellle/targets.vim
+	-- (and the kana/vim-textobj-user framework it and the others sat on).
+	{
+		"nvim-mini/mini.ai",
+		event = { "BufReadPost", "BufNewFile" },
+		opts = {},
+	},
 }
