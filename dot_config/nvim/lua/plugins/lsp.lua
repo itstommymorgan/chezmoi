@@ -52,6 +52,38 @@ return {
           })
         end,
       })
+
+      -- Neovim core binds gr* to LSP requests (grn=rename, gra=code action,
+      -- grr=references, gri=implementation, grt=type definition, gO=document
+      -- symbols) but leaves definition/declaration/call-hierarchy unbound.
+      -- Extend the same gr* "goto LSP request" convention to cover them.
+      vim.api.nvim_create_autocmd('LspAttach', {
+        callback = function(args)
+          local client = vim.lsp.get_client_by_id(args.data.client_id)
+          if not client then
+            return
+          end
+          local buf = args.buf
+          local caps = client.server_capabilities
+
+          if caps.definitionProvider then
+            vim.keymap.set('n', 'grd', vim.lsp.buf.definition, { buffer = buf, desc = 'vim.lsp.buf.definition()' })
+          end
+          if caps.declarationProvider then
+            vim.keymap.set('n', 'grD', vim.lsp.buf.declaration, { buffer = buf, desc = 'vim.lsp.buf.declaration()' })
+          end
+          if caps.callHierarchyProvider then
+            vim.keymap.set(
+              'n', 'grc', vim.lsp.buf.incoming_calls,
+              { buffer = buf, desc = 'vim.lsp.buf.incoming_calls()' }
+            )
+            vim.keymap.set(
+              'n', 'gro', vim.lsp.buf.outgoing_calls,
+              { buffer = buf, desc = 'vim.lsp.buf.outgoing_calls()' }
+            )
+          end
+        end,
+      })
     end,
   },
 
