@@ -4,7 +4,6 @@ tap "OJFord/formulae"
 # --- CLI tools ---
 brew "bat"
 brew "curl"
-brew "ctags"
 brew "diff-so-fancy"
 brew "eza"
 brew "fd"
