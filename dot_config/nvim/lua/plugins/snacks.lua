@@ -55,6 +55,7 @@ return {
 		scroll = { enabled = true },
 		indent = { enabled = true },
 		words = { enabled = true },
+		notifier = { enabled = true },
 		terminal = {
 			win = {
 				position = "float",
