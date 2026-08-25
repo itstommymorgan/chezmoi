@@ -1,0 +1,8 @@
+{
+  "config": {
+    // already hard-wrapped at 80 via textwidth+formatoptions; don't fight it
+    "MD013": false,
+    // GFM readmes routinely use raw HTML (<details>, badges, etc.)
+    "MD033": false
+  }
+}

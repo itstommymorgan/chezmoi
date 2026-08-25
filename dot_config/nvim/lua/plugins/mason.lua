@@ -14,6 +14,9 @@ return {
         "bash-language-server",
         "shellcheck",
         "shfmt",
+        -- Markdown
+        "marksman",
+        "markdownlint-cli2",
       },
       auto_update = true,
       run_on_start = true,
