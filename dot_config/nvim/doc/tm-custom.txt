@@ -79,28 +79,29 @@ CUSTOM SHORTCUTS                                           *tm-custom-shortcuts*
 ==============================================================================
 CUSTOM TEXT OBJECTS                                      *tm-custom-textobjects*
 
-Arguments in functions/lists/etc: (from vim-angry)
-`aa` / `ia` - an argument (with separator) or inner argument (without separator).
+Brackets, quotes, tags, function calls, arguments: (from mini.ai)
+`a<char>` / `i<char>` - around/inside the object, e.g. `a(`/`i(`, `a"`/`i"`,
+`at`/`it` (tag), `af`/`if` (function call), `aa`/`ia` (argument). Seeks
+forward on the line if the cursor isn't directly on/in the target, and
+expands outward through nesting on repeated use.
 
-Comments: (from vim-textobj-comment)
-`ac` / `ic` - select a comment / inner comment. 
-
-Indents: (from vim-textobj-indent)
-`ai` / `ii` - select an indent / inside an indent.
-
-Lines: (from vim-textobj-line)
-`al` / `il` - select all the characters in a line (without EOL). il doesn't select
-leading whitespace.
-
-Punctuation pairs: (from targets.vim)
-(This applies to quotes, brackets, etc. but I will only use `(` for examples)
+Next/last variants of the above: (also mini.ai)
+Prefix the target char with `n` (next) or `l` (last/previous) instead of
+using it bare.
 `an(` / `in(` - the _next_ () and its contents, or just its contents.
+`al}` / `il}` - the _previous_ {} and its contents, or just its contents.
 
-==============================================================================
-TODO                                                            *tm-custom-todo*
+Comments: (from nvim-treesitter-textobjects)
+`ac` / `ic` - around/inside a comment. Treesitter-based; `ic` isn't defined
+for every language's query file, but fails silently rather than erroring
+when it's missing.
 
-- Set up keybindings for forcing a tags refresh w/ gutentags
+Indentation: (from nvim-various-textobjs)
+`ai` / `ii` - around/inside a block of same-or-greater-indented lines.
 
-
+Current line, characterwise: (from nvim-various-textobjs)
+`a_` / `i_` - the whole line, or just its content excluding leading/trailing
+whitespace either way. This used to be `al`/`il`, but those are now claimed
+by mini.ai's next/last modifiers above.
 
 vim:tw=78:et:ft=help:norl:
