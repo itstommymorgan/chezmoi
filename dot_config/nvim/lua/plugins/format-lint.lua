@@ -12,6 +12,7 @@ return {
         -- explicit (not LSP fallback): chezmoi-template.nvim's masked-format
         -- bridge formats via a scratch buffer with no LSP attached
         toml = { "taplo" },
+        yaml = { "prettier" },
         zsh = { "shfmt" },
       },
       format_on_save = {
@@ -47,6 +48,7 @@ return {
       lint.linters_by_ft = {
         sh = { "shellcheck" },
         markdown = { "markdownlint-cli2" },
+        yaml = { "yamllint" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {
         callback = function()

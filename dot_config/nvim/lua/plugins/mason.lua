@@ -27,6 +27,9 @@ return {
         "prettier",
         -- TOML
         "taplo",
+        -- YAML
+        "yaml-language-server",
+        "yamllint",
       },
       auto_update = true,
       run_on_start = true,
