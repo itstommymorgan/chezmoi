@@ -20,6 +20,8 @@ return {
         -- JSON
         "json-lsp",
         "prettier",
+        -- TOML
+        "taplo",
       },
       auto_update = true,
       run_on_start = true,

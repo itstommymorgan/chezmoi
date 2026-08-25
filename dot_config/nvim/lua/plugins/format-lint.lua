@@ -9,6 +9,9 @@ return {
         jsonc = { "prettier" },
         lua = { "stylua" },
         sh = { "shfmt" },
+        -- explicit (not LSP fallback): chezmoi-template.nvim's masked-format
+        -- bridge formats via a scratch buffer with no LSP attached
+        toml = { "taplo" },
         zsh = { "shfmt" },
       },
       format_on_save = {

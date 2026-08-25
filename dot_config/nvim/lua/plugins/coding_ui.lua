@@ -8,7 +8,8 @@ return {
 		build = ":TSUpdate",
 		config = function()
 			-- jsonc filetype maps to this same grammar, no separate parser exists
-			require("nvim-treesitter").install({ "json" })
+			-- gotmpl: dual highlighting for chezmoi's *.tmpl files (see plugins/chezmoi.lua)
+			require("nvim-treesitter").install({ "json", "toml", "gotmpl" })
 
 			-- folds start open; foldmethod=expr defaults to all-closed otherwise
 			vim.o.foldlevelstart = 99
