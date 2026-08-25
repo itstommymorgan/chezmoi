@@ -1,8 +1,6 @@
--- nvim-dap - Debug Adapter Protocol client. Nothing here loads until the
--- first <leader>d* keypress. The core (breakpoints, stepping, UI, REPL) is
--- language-agnostic: it still needs a `dap.adapters.<name>` +
--- `dap.configurations.<filetype>` block added per language before you can
--- actually start a session - see the chat for a worked example and pointers.
+-- Debug Adapter Protocol client. Needs a dap.adapters.<name> +
+-- dap.configurations.<filetype> block added per language before a
+-- session can actually start.
 return {
 	"mfussenegger/nvim-dap",
 	dependencies = {

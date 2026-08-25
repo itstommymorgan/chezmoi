@@ -52,11 +52,7 @@ return {
 	{ "andymass/vim-matchup", event = { "BufReadPost", "BufNewFile" } },
 
 	-- the theme - loaded eagerly since display.lua sets it as the
-	-- colorscheme before lazy.nvim would ever fire a lazy trigger.
-	-- Lua rewrite of dracula/vim with highlight coverage for treesitter,
-	-- LSP semantic tokens, and several plugins in this config (telescope,
-	-- neo-tree, gitsigns, lualine, nvim-dap-ui) that the original never
-	-- learned about. Same `colorscheme dracula` command name either way.
+	-- colorscheme before lazy.nvim would ever fire a lazy trigger
 	{ "Mofiqul/dracula.nvim", name = "dracula", lazy = false, priority = 1000 },
 
 	-- file tree browser window
@@ -115,9 +111,6 @@ return {
 			{ "<Leader>fg", "<cmd>Telescope live_grep<cr>", desc = "Live grep" },
 			{ "<Leader>fh", "<cmd>Telescope help_tags<cr>", desc = "Find help tags" },
 			{ "<Leader>fm", "<cmd>Telescope keymaps<cr>", desc = "Find keymaps" },
-			-- LSP-backed replacement for the old ctags-based `Telescope
-			-- tags` (gutentags is gone); queries the attached language
-			-- server directly rather than a pre-built tags index.
 			{ "<Leader>ft", "<cmd>Telescope lsp_dynamic_workspace_symbols<cr>", desc = "Find symbols (LSP)" },
 		},
 		config = function()

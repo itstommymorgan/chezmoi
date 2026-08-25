@@ -5,16 +5,8 @@
 -- 2) Plugins that add or modify operators, which perform operations against
 --    text objects/selections
 return {
-	-- allows for splitting and joining multiline statements
-	-- (treesitter-based; replaces splitjoin.vim). Default keymaps collide
-	-- with existing binds (<Leader>m is harpoon, j/s are window-nav/split),
-	-- so they're remapped under a dedicated <Leader>x prefix instead. (An
-	-- earlier version of this used <Leader>J, which turned out to still
-	-- collide with window-nav's own real <Leader>J mapping - lazy.nvim's
-	-- `keys` group-label entries with a nil action don't register an
-	-- actual keymap, they're purely which-key display metadata, so the
-	-- pre-existing binding was still live underneath and made <Leader>J
-	-- ambiguous.)
+	-- treesitter-based split/join of multiline statements. Under <Leader>x
+	-- since j/J/s/S/m are all already claimed by window-nav/split/harpoon.
 	{
 		"Wansmer/treesj",
 		dependencies = { "nvim-treesitter/nvim-treesitter" },
@@ -48,10 +40,8 @@ return {
 	-- provide a shortcut for sorting text in a motion/textobj
 	"christoomey/vim-sort-motion",
 
-	-- comment text objects (ic/ac), treesitter-based - replaces
-	-- glts/vim-textobj-comment. No default keymaps in this plugin's newer
-	-- API; @comment.inner isn't defined for every language's query file,
-	-- but falls back gracefully rather than erroring when missing.
+	-- comment text objects (ic/ac), treesitter-based. @comment.inner isn't
+	-- defined for every language's query file, but fails silently.
 	{
 		"nvim-treesitter/nvim-treesitter-textobjects",
 		branch = "main",
@@ -78,12 +68,8 @@ return {
 	},
 
 	-- indentation (ii/ai) and current-line-characterwise (i_/a_) text
-	-- objects - replaces kana/vim-textobj-indent and kana/vim-textobj-line.
-	-- vim-textobj-line's old il/al keys aren't reused here: mini.ai below
-	-- claims il/al itself for its "inside/around last" next/last-match
-	-- modifiers (e.g. `dil)` = delete inside last paren), and that's worth
-	-- keeping intact rather than overriding for this comparatively minor
-	-- object.
+	-- objects. Line uses i_/a_ rather than il/al since mini.ai below
+	-- claims those for its next/last-match modifiers.
 	{
 		"chrisgrieser/nvim-various-textobjs",
 		keys = {
@@ -115,18 +101,14 @@ return {
 		opts = {},
 	},
 
-	-- sets `commentstring` based on treesitter injections at the cursor,
-	-- so e.g. JS inside an HTML <script> tag or a Vue SFC's <template>
-	-- block gets the right comment syntax. Wired into Comment.nvim below
-	-- via pre_hook rather than its default CursorHold autocmd.
+	-- sets `commentstring` based on treesitter injections at the cursor
+	-- (e.g. JS inside an HTML <script> tag gets `//`, not `<!-- -->`)
 	{
 		"JoosepAlviste/nvim-ts-context-commentstring",
 		opts = { enable_autocmd = false },
 	},
 
-	-- Provide operators for commenting code (gcc line toggle, gc{motion}/
-	-- visual gc operator - same defaults as tpope/vim-commentary, which
-	-- this replaces)
+	-- comment/uncomment operators: gcc line toggle, gc{motion}/visual gc
 	{
 		"numToStr/Comment.nvim",
 		event = { "BufReadPost", "BufNewFile" },
@@ -141,20 +123,16 @@ return {
 	-- Allow custom commands to be repeated
 	"tpope/vim-repeat",
 
-	-- Enables operators for manipulating surrounding punctuations (ys/ds/cs,
-	-- S/gS in visual mode, <C-g>s in insert mode - same defaults as
-	-- tpope/vim-surround, which this replaces)
+	-- surround operators: ys/ds/cs, S/gS in visual mode, <C-g>s in insert
 	{
 		"kylechui/nvim-surround",
 		event = { "BufReadPost", "BufNewFile" },
 		opts = {},
 	},
 
-	-- extends a/i text objects with seek-forward and expand-outward
-	-- behavior for brackets/quotes/tag/argument/function-call, plus
-	-- explicit an/in/al/il next-/last-match modifiers (e.g. `di al)` =
-	-- delete around the previous paren) - replaces wellle/targets.vim
-	-- (and the kana/vim-textobj-user framework it and the others sat on).
+	-- extends a/i text objects with seek-forward/expand-outward behavior
+	-- and an/in/al/il next-/last-match modifiers (e.g. `di al)` = delete
+	-- around the previous paren)
 	{
 		"nvim-mini/mini.ai",
 		event = { "BufReadPost", "BufNewFile" },

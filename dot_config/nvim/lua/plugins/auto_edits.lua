@@ -1,7 +1,7 @@
 -- This file contains configuration information for plugins that perform
 -- automatic edits (or other operations like ctags generation) based on context. Programmer's little helpers.
 return {
-	-- keep HTML/JSX/etc tags in sync (treesitter-based; replaces tagalong.vim)
+	-- keep HTML/JSX/etc tags in sync
 	{
 		"windwp/nvim-ts-autotag",
 		event = "InsertEnter",
@@ -18,12 +18,9 @@ return {
 		end,
 	},
 
-	-- Automatically add 'end' statements as appropriate (treesitter-based;
-	-- replaces vim-endwise). Activates via a FileType autocmd registered on
-	-- load, so it needs lazy.nvim's `ft` trigger (not `event`) - `ft`
-	-- replays FileType for the buffer that triggered the load, so the
-	-- current buffer isn't missed the way it would be with e.g. InsertEnter,
-	-- which always fires after FileType has already come and gone.
+	-- automatically add 'end' statements. Needs `ft` (not `event`) since it
+	-- activates via a FileType autocmd - `event` would miss the buffer
+	-- that triggered the load, since FileType fires first.
 	{
 		"RRethy/nvim-treesitter-endwise",
 		ft = { "ruby", "lua", "vim", "bash", "sh", "fish", "elixir", "julia" },

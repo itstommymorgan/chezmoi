@@ -1,6 +1,4 @@
--- harpoon2 - pin a small set of files per-project and jump straight to
--- them. Also backs the "Bookmarks" entry on the snacks dashboard, see
--- the `harpoon_items` finder wired into plugins/snacks.lua.
+-- pin a small set of files per-project and jump straight to them
 return {
 	"ThePrimeagen/harpoon",
 	branch = "harpoon2",

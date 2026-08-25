@@ -1,9 +1,6 @@
 -- snacks.nvim - collection of QoL plugins
 
--- Reads the current harpoon2 list into snacks.picker items, so the
--- dashboard's "Bookmarks" entry (below) shows harpoon marks instead of
--- vim marks. harpoon2 is lazy-loaded on VeryLazy (see plugins/harpoon.lua),
--- which fires well before this could ever run.
+-- feeds the harpoon2 list into the dashboard's "Bookmarks" picker below
 local function harpoon_items()
 	local harpoon = require("harpoon")
 	local list = harpoon:list()

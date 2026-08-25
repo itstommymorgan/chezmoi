@@ -1,6 +1,4 @@
--- flash.nvim - jump anywhere in the visible buffers by typing a label,
--- with treesitter-aware node selection and remote (operator-pending)
--- targeting.
+-- jump anywhere in the visible buffers by typing a label
 return {
 	"folke/flash.nvim",
 	event = "VeryLazy",

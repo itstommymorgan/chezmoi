@@ -1,12 +1,10 @@
--- nvim-treesitter-context - pins the enclosing function/class/block at the
--- top of the window while you scroll through its body.
+-- pins the enclosing function/class/block at the top of the window
+-- while scrolling through its body
 return {
 	"nvim-treesitter/nvim-treesitter-context",
 	event = { "BufReadPost", "BufNewFile" },
 	opts = {
-		-- unbounded by default, which can eat half the screen in deeply
-		-- nested code; cap it to a handful of stacked context lines
-		max_lines = 6,
+		max_lines = 6, -- default is unbounded, which can eat half the screen
 	},
 	keys = {
 		{
