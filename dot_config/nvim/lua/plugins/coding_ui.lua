@@ -112,4 +112,25 @@ return {
 			})
 		end,
 	},
+
+	-- keyboard-driven popup for browsing/jumping the current file's LSP
+	-- symbol tree, built on nvim-navic above
+	{
+		"hasansujon786/nvim-navbuddy",
+		dependencies = {
+			"neovim/nvim-lspconfig",
+			"SmiteshP/nvim-navic",
+			"MunifTanjim/nui.nvim",
+		},
+		opts = { lsp = { auto_attach = true } },
+		keys = {
+			{
+				"<Leader>n",
+				function()
+					require("nvim-navbuddy").open()
+				end,
+				desc = "Navbuddy",
+			},
+		},
+	},
 }
