@@ -116,6 +116,47 @@
                                 "type": "basic"
                             }
                         ]
+                    },
+                    {
+                        "description": "left_option + a/s/d/f = bracket layer ( [ { } ] ).",
+                        "manipulators": [
+                            {
+                                "description": "left_option+a = [",
+                                "from": {
+                                    "key_code": "a",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [{ "key_code": "open_bracket" }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "left_option+s = {",
+                                "from": {
+                                    "key_code": "s",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [{ "key_code": "open_bracket", "modifiers": ["left_shift"] }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "left_option+d = }",
+                                "from": {
+                                    "key_code": "d",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [{ "key_code": "close_bracket", "modifiers": ["left_shift"] }],
+                                "type": "basic"
+                            },
+                            {
+                                "description": "left_option+f = ]",
+                                "from": {
+                                    "key_code": "f",
+                                    "modifiers": { "mandatory": ["left_option"] }
+                                },
+                                "to": [{ "key_code": "close_bracket" }],
+                                "type": "basic"
+                            }
+                        ]
                     }
                 ]
             },
