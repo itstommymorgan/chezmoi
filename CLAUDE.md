@@ -41,22 +41,11 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 
 ## Shell (zsh)
 
-Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshenv` loads for *every* shell invocation (including non-interactive/scripts), so it only sets up Homebrew's PATH (`__tm_setup_homebrew`, arch-aware: `/opt/homebrew` on arm64 vs `/usr/local`) and mise shims — needed for scripts to resolve tools correctly. `.zshrc` (interactive-only) does the heavier lifting: activates mise, sources zplug and `dot_zsh/plug.zsh` (the zplug plugin list), sources every file under `dot_zsh/custom/*.zsh`, and sets interactive-only env vars (`BAT_THEME`, `KEYTIMEOUT`, `LC_ALL`).
+Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshenv` loads for *every* shell invocation (including non-interactive/scripts), so it only sets up Homebrew's PATH (`__tm_setup_homebrew`, arch-aware: `/opt/homebrew` on arm64 vs `/usr/local`) and mise shims — needed for scripts to resolve tools correctly. `.zshrc` (interactive-only) does the heavier lifting: activates mise, sources zplug and the zplug plugin list, sources every custom script, and sets interactive-only env vars (`BAT_THEME`, `KEYTIMEOUT`, `LC_ALL`). See `dot_zsh/CLAUDE.md` for the zplug/custom-script details.
 
-To add a new interactive-only tool/alias, drop a file in `dot_zsh/custom/`; it's picked up automatically by the loop in `dot_zshrc`. To add a zplug plugin, edit `dot_zsh/plug.zsh`.
+## Per-tool docs
 
-## Neovim (`dot_config/nvim`)
-
-Plugin-managed via `lazy.nvim` (bootstrapped in `lua/plugin_manager.lua`, which clones lazy.nvim if absent and calls `require('lazy').setup('plugins')` — so every file under `lua/plugins/*.lua` returning a lazy.nvim plugin spec is auto-loaded; no manual registration needed). Core (non-plugin) config is split by concern and required in order from `init.lua`: `display`, `line_numbers`, `editing`, `filetypes`, `keybindings`.
-
-Notable non-obvious pieces:
-- `lua/filetypes.lua` teaches Neovim to detect filetypes for chezmoi's `dot_*` naming convention (e.g. a buffer at `.../dot_zshrc` is filetype-detected as if it were `.zshrc`).
-- `lua/plugins/claudecode.lua` wires up `coder/claudecode.nvim` (depends on `folke/snacks.nvim`) for driving Claude Code from inside Neovim; it runs the `claude` CLI (installed via the `claude-code` Homebrew cask) in an embedded terminal over the same WebSocket protocol as the official VS Code extension, bound under `<Leader>a*`.
-- `lua/keybindings.lua` is the entry point for keymaps; per-plugin keybindings live in `lua/keybindings/{dashboard,fterm,fugitive,telescope,trouble}.lua`.
-
-## Hammerspoon (`dot_hammerspoon`)
-
-macOS automation via Lua. `dot_hammerspoon/README.md` is the maintained source of truth for what each piece does (Spoons vs. custom scripts) — read it rather than inferring from filenames. Highlights: `meeting_checks.lua` detects active Zoom/Meet calls and drives Home Assistant + DnD side effects; `keybinder.lua` wraps `RecursiveBinder.spoon` for all keybinding declarations, which are then invoked from `init.lua`.
+Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads automatically once it touches a file in that subtree: `dot_zsh/CLAUDE.md`, `dot_config/nvim/CLAUDE.md`, `dot_hammerspoon/CLAUDE.md`, `dot_config/karabiner/CLAUDE.md`.
 
 ## Editing templates
 
