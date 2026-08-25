@@ -6,7 +6,38 @@
 --    text objects/selections
 return {
 	-- allows for splitting and joining multiline statements
-	"AndrewRadev/splitjoin.vim",
+	-- (treesitter-based; replaces splitjoin.vim). Default keymaps collide
+	-- with existing binds (<Leader>m is harpoon, j/s are window-nav/split),
+	-- so they're remapped under a dedicated <Leader>J prefix instead.
+	{
+		"Wansmer/treesj",
+		dependencies = { "nvim-treesitter/nvim-treesitter" },
+		keys = {
+			{ "<Leader>J", nil, desc = "Split/Join" },
+			{
+				"<Leader>Jm",
+				function()
+					require("treesj").toggle()
+				end,
+				desc = "Toggle split/join",
+			},
+			{
+				"<Leader>Jj",
+				function()
+					require("treesj").join()
+				end,
+				desc = "Join",
+			},
+			{
+				"<Leader>Js",
+				function()
+					require("treesj").split()
+				end,
+				desc = "Split",
+			},
+		},
+		opts = { use_default_keymaps = false },
+	},
 
 	-- provide a shortcut for sorting text in a motion/textobj
 	"christoomey/vim-sort-motion",
