@@ -6,6 +6,24 @@ return {
 		"nvim-treesitter/nvim-treesitter",
 		lazy = false,
 		build = ":TSUpdate",
+		config = function()
+			-- jsonc filetype maps to this same grammar, no separate parser exists
+			require("nvim-treesitter").install({ "json" })
+
+			-- folds start open; foldmethod=expr defaults to all-closed otherwise
+			vim.o.foldlevelstart = 99
+
+			-- generic: highlighting + folding for any filetype with an
+			-- installed parser, silently a no-op otherwise
+			vim.api.nvim_create_autocmd("FileType", {
+				callback = function()
+					if pcall(vim.treesitter.start) then
+						vim.wo[0][0].foldmethod = "expr"
+						vim.wo[0][0].foldexpr = "v:lua.vim.treesitter.foldexpr()"
+					end
+				end,
+			})
+		end,
 	},
 
 	-- git signs in the gutter

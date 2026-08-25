@@ -5,6 +5,8 @@ return {
     opts = {
       formatters_by_ft = {
         bash = { "shfmt" },
+        json = { "prettier" },
+        jsonc = { "prettier" },
         lua = { "stylua" },
         sh = { "shfmt" },
         zsh = { "shfmt" },

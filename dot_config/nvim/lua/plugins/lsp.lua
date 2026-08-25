@@ -92,4 +92,7 @@ return {
     event = "LspAttach",
     config = true,
   },
+
+  -- JSON schema catalog, consumed by after/lsp/jsonls.lua
+  { 'b0o/SchemaStore.nvim', lazy = true },
 }

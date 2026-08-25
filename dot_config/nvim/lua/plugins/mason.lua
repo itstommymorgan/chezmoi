@@ -17,6 +17,9 @@ return {
         -- Markdown
         "marksman",
         "markdownlint-cli2",
+        -- JSON
+        "json-lsp",
+        "prettier",
       },
       auto_update = true,
       run_on_start = true,
