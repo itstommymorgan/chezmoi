@@ -74,6 +74,9 @@ return {
 					hide_dotfiles = false,
 					never_show = { ".git" },
 				},
+				-- oil.nvim owns `:e <dir>` instead (below); `-` is still
+				-- the explicit way to reach neo-tree.
+				hijack_netrw_behavior = "disabled",
 			}
 			opts.window = {
 				mappings = {
@@ -97,9 +100,8 @@ return {
 
 	-- edit a directory like a normal buffer: add/delete lines to
 	-- create/delete files, edit a line to rename, :w to commit.
-	-- Deliberately not the default file explorer - neo-tree above
-	-- already owns that (hijack_netrw_behavior), so this only
-	-- activates via <Leader>o.
+	-- `:e <dir>` opens here (default_file_explorer); `<Leader>o` opens
+	-- the current file's parent directory directly.
 	{
 		"stevearc/oil.nvim",
 		lazy = false,
@@ -108,7 +110,7 @@ return {
 			{ "<Leader>o", "<cmd>Oil<cr>", desc = "Open parent directory (oil)" },
 		},
 		opts = {
-			default_file_explorer = false,
+			default_file_explorer = true,
 		},
 	},
 
