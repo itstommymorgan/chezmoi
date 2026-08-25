@@ -29,8 +29,28 @@ return {
 		dependencies = { "kana/vim-textobj-user" },
 	},
 
-	-- Provide operators for commenting code.
-	"tpope/vim-commentary",
+	-- sets `commentstring` based on treesitter injections at the cursor,
+	-- so e.g. JS inside an HTML <script> tag or a Vue SFC's <template>
+	-- block gets the right comment syntax. Wired into Comment.nvim below
+	-- via pre_hook rather than its default CursorHold autocmd.
+	{
+		"JoosepAlviste/nvim-ts-context-commentstring",
+		opts = { enable_autocmd = false },
+	},
+
+	-- Provide operators for commenting code (gcc line toggle, gc{motion}/
+	-- visual gc operator - same defaults as tpope/vim-commentary, which
+	-- this replaces)
+	{
+		"numToStr/Comment.nvim",
+		event = { "BufReadPost", "BufNewFile" },
+		dependencies = { "JoosepAlviste/nvim-ts-context-commentstring" },
+		opts = function()
+			return {
+				pre_hook = require("ts_context_commentstring.integrations.comment_nvim").create_pre_hook(),
+			}
+		end,
+	},
 
 	-- Allow custom commands to be repeated
 	"tpope/vim-repeat",
