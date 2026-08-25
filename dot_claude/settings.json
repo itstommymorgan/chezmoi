@@ -44,7 +44,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "/opt/homebrew/bin/terminal-notifier -message 'Claude Code needs your attention' -title 'Claude Code'"
+            "command": "open /opt/homebrew/opt/terminal-notifier/terminal-notifier.app --args -message 'Claude Code needs your attention' -title 'Claude Code'"
           }
         ]
       }
