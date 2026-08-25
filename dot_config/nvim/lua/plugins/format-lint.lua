@@ -18,6 +18,17 @@ return {
         timeout_ms = 500,
         lsp_format = "fallback",
       },
+      -- shfmt's own dialect auto-detect goes off the literal filename (e.g.
+      -- "dot_zshrc" in the chezmoi source tree misdetects as bash and errors
+      -- on zsh-only syntax) - override with Neovim's own correct filetype
+      formatters = {
+        shfmt = {
+          append_args = function(_, ctx)
+            local dialect = ({ zsh = "zsh", bash = "bash", sh = "bash" })[vim.bo[ctx.buf].filetype]
+            return dialect and { "-ln", dialect } or {}
+          end,
+        },
+      },
     },
   },
 

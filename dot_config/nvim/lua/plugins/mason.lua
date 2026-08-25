@@ -16,6 +16,9 @@ return {
         "bash-language-server",
         "shellcheck",
         "shfmt",
+        -- shellcheck doesn't understand zsh syntax (false positives on
+        -- zsh-only constructs); shuck is dialect-aware for bash/zsh/posix/mksh
+        "shuck",
         -- Markdown
         "marksman",
         "markdownlint-cli2",
