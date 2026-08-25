@@ -1,8 +1,12 @@
 -- This file contains configuration information for plugins that perform
 -- automatic edits (or other operations like ctags generation) based on context. Programmer's little helpers.
 return {
-	-- keep HTML tags in sync
-	{ "AndrewRadev/tagalong.vim", event = "InsertEnter" },
+	-- keep HTML/JSX/etc tags in sync (treesitter-based; replaces tagalong.vim)
+	{
+		"windwp/nvim-ts-autotag",
+		event = "InsertEnter",
+		opts = {},
+	},
 
 	-- automatically create matching pairs
 	{
