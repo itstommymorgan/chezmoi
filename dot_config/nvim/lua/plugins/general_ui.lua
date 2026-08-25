@@ -95,6 +95,23 @@ return {
 		end,
 	},
 
+	-- edit a directory like a normal buffer: add/delete lines to
+	-- create/delete files, edit a line to rename, :w to commit.
+	-- Deliberately not the default file explorer - neo-tree above
+	-- already owns that (hijack_netrw_behavior), so this only
+	-- activates via <Leader>o.
+	{
+		"stevearc/oil.nvim",
+		lazy = false,
+		dependencies = { "nvim-tree/nvim-web-devicons" },
+		keys = {
+			{ "<Leader>o", "<cmd>Oil<cr>", desc = "Open parent directory (oil)" },
+		},
+		opts = {
+			default_file_explorer = false,
+		},
+	},
+
 	-- fuzzy finder over lists
 	{
 		"nvim-telescope/telescope.nvim",
