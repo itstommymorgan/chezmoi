@@ -48,10 +48,10 @@ return {
 			desc = "git-smart-sync",
 		},
 		-- PRs use gr/gR (not gp/gP) since gp is already git push above
-		{ "<Leader>gi", function() Snacks.picker.gh_issue() end, desc = "GitHub issues (open)" },
-		{ "<Leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "GitHub issues (all)" },
-		{ "<Leader>gr", function() Snacks.picker.gh_pr() end, desc = "GitHub PRs (open)" },
-		{ "<Leader>gR", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "GitHub PRs (all)" },
+		{ "<Leader>gi", function() Snacks.picker.gh_issue() end, desc = "Browse open issues" },
+		{ "<Leader>gI", function() Snacks.picker.gh_issue({ state = "all" }) end, desc = "Browse all issues" },
+		{ "<Leader>gr", function() Snacks.picker.gh_pr() end, desc = "Browse open PRs" },
+		{ "<Leader>gR", function() Snacks.picker.gh_pr({ state = "all" }) end, desc = "Browse all PRs" },
 	},
 	---@type snacks.Config
 	opts = {
