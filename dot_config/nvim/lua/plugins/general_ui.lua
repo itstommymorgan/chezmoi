@@ -52,8 +52,12 @@ return {
 	{ "andymass/vim-matchup", event = { "BufReadPost", "BufNewFile" } },
 
 	-- the theme - loaded eagerly since display.lua sets it as the
-	-- colorscheme before lazy.nvim would ever fire a lazy trigger
-	{ "dracula/vim", name = "dracula", lazy = false, priority = 1000 },
+	-- colorscheme before lazy.nvim would ever fire a lazy trigger.
+	-- Lua rewrite of dracula/vim with highlight coverage for treesitter,
+	-- LSP semantic tokens, and several plugins in this config (telescope,
+	-- neo-tree, gitsigns, lualine, nvim-dap-ui) that the original never
+	-- learned about. Same `colorscheme dracula` command name either way.
+	{ "Mofiqul/dracula.nvim", name = "dracula", lazy = false, priority = 1000 },
 
 	-- file tree browser window
 	{
