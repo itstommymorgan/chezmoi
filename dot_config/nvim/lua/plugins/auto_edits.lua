@@ -30,6 +30,14 @@ return {
 		end,
 	},
 
-	-- Automatically add 'end' statements as appropriate
-	{ "tpope/vim-endwise", event = "InsertEnter" },
+	-- Automatically add 'end' statements as appropriate (treesitter-based;
+	-- replaces vim-endwise). Activates via a FileType autocmd registered on
+	-- load, so it needs lazy.nvim's `ft` trigger (not `event`) - `ft`
+	-- replays FileType for the buffer that triggered the load, so the
+	-- current buffer isn't missed the way it would be with e.g. InsertEnter,
+	-- which always fires after FileType has already come and gone.
+	{
+		"RRethy/nvim-treesitter-endwise",
+		ft = { "ruby", "lua", "vim", "bash", "sh", "fish", "elixir", "julia" },
+	},
 }
