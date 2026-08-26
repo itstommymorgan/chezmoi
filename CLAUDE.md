@@ -15,7 +15,7 @@ chezmoi uses filename prefixes/suffixes to encode behavior. Get these wrong and 
 - `run_once_*` → script runs exactly once ever (tracked by chezmoi state).
 - `run_onchange_*` → script re-runs whenever its own content hash changes. These embed a hash comment of another file's contents (e.g. `# Brewfile hash: {{ include "Brewfile" | sha256sum }}`) specifically so they re-run when *that* file changes — see `run_onchange_before_10-install-homebrew.sh.tmpl` (hashes `Brewfile`) and `run_onchange_after_10-install-mise.sh.tmpl` (hashes `dot_config/mise/config.toml.tmpl`). If you edit `Brewfile` or the mise config, don't touch the hash by hand — chezmoi recomputes it from the template on apply.
 - `run_before_*` / `run_after_*` (no `_once`/`_onchange`) → run on every `chezmoi apply`.
-- Ordering is lexical by the numeric prefix (`00`, `10`, `20`, `90`, `91`, `99`), which is why e.g. company-folder creation is `00` (before) and login items are `99` (after).
+- Ordering is ASCII by *target name* (prefixes and `.tmpl` stripped), but **only within the `before_` group and the `after_` group separately** — the attribute wins, so every `before_` script precedes every `after_` script regardless of numbers. The numeric prefixes (`00`, `10`, `20`, `25`, `90`, `91`, `99`) sequence scripts inside one group; they say nothing across groups. See "Provisioning flow" below for the real order.
 - `.chezmoiignore` files scope which paths under a directory chezmoi manages (e.g. `dot_config/nvim/.chezmoiignore` excludes `lazy-lock.json`; `dot_config/karabiner/.chezmoiignore` excludes `automatic_backups`).
 - Any path component starting with a literal `.` (not `dot_`) is invisible to chezmoi — it's never applied, anywhere in the tree. This is why global Claude Code settings live in `dot_claude/` (translated to `~/.claude`, scoped down by its own `.chezmoiignore` to just `settings.json`, `statusline-command.sh`, `keybindings.json`) rather than a literal `.claude/`, and why the repo-root `.claude/` and any nested `.claude/` (e.g. `dot_config/nvim/.claude/`) are safe, chezmoi-invisible spots for Claude Code's own project config/skills.
 
@@ -31,16 +31,26 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 
 ## Provisioning flow (fresh machine bootstrap order)
 
-1. `run_once_before_20-use-1password-for-ssh.sh.tmpl` — interactively walks through enabling the 1Password SSH agent (blocks on user confirmation).
-2. `run_before_25-ensure-1password.sh` — failsafe: launches 1Password in the background (`open -g -j`) if it isn't running. `op` only resolves secrets while the desktop app is up, and `dot_ssh/id_ed25519.pub.tmpl` calls `onepasswordRead`; since targets apply alphabetically, a failure under `.ssh/` aborts every `after_` script behind it. Never exits non-zero — on a fresh machine 1Password legitimately isn't set up yet, and blocking bootstrap would be worse. 1Password is also in the login items list so this should rarely fire.
-3. `run_once_before_99-disable-spotlight-shortcut.sh.tmpl` — frees the Spotlight shortcut via `PlistBuddy`.
-4. `run_onchange_before_10-install-homebrew.sh.tmpl` — installs Xcode CLT, Homebrew, Rosetta (arm64 only), runs `brew bundle` against `Brewfile`, and sets the machine hostname.
-5. `run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
-6. `run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
-7. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
-8. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
-9. `run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
-10. `run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
+**The `before_`/`after_` attribute dominates; the numeric prefix only orders scripts _within_ each group.** Every `before_` script runs before any file is written, every `after_` script runs after all of them, and `once`/`onchange`/plain variants interleave purely by target name (the filename with the `run_*_(before|after)_` prefix and `.tmpl` suffix stripped). So `99-disable-spotlight-shortcut` (before) runs earlier than `01-auth-gh` (after), despite the numbers. Verified empirically — don't infer cross-group order from the prefixes.
+
+**Before any files are written:**
+
+1. `run_once_before_00-create-company-projects-folder.sh.tmpl` — creates `~/projects/<companyName>` when that prompt was answered.
+2. `run_onchange_before_10-install-homebrew.sh.tmpl` — installs Xcode CLT, Homebrew, Rosetta (arm64 only), runs `brew bundle` against `Brewfile`, and sets the machine hostname.
+3. `run_once_before_20-use-1password-for-ssh.sh.tmpl` — interactively walks through enabling the 1Password SSH agent (blocks on user confirmation).
+4. `run_before_25-ensure-1password.sh` — failsafe: launches 1Password in the background (`open -g -j`) if it isn't running. `op` only resolves secrets while the desktop app is up, and `dot_ssh/id_ed25519.pub.tmpl` calls `onepasswordRead`; since targets apply in ASCII order, a failure under `.ssh/` aborts every `after_` script behind it. Never exits non-zero — on a fresh machine 1Password legitimately isn't set up yet, and blocking bootstrap would be worse. 1Password is also in the login items list, so this should rarely fire.
+5. `run_once_before_99-disable-spotlight-shortcut.sh.tmpl` — frees the Spotlight shortcut via `PlistBuddy`.
+
+**Files are rendered and written here** (in ASCII order of target path — this is why a failing template under `.ssh/` strands everything below).
+
+**After all files are written:**
+
+6. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
+7. `run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
+8. `run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
+9. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
+10. `run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
+11. `run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
 
 ## Shell (zsh)
 
