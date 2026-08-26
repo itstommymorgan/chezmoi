@@ -63,7 +63,6 @@ project's own `CLAUDE.md`, not here.
 ## Git
 
 - Don't commit unless asked. Don't push without asking first.
-- Branch before committing when on the default branch.
 - Stage explicitly by filename; avoid `git add -A` / `git add .`.
 - Review what's staged before committing, and check for secrets in anything bound for a
   public remote.
