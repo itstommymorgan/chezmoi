@@ -34,6 +34,12 @@ return {
         "ruby-lsp",
         "rubocop",
         "rdbg",
+        -- ERB
+        "herb-language-server",
+        -- CSS/SCSS/Sass
+        "css-lsp",
+        "some-sass-language-server",
+        "stylelint",
       },
       auto_update = true,
       run_on_start = true,
