@@ -7,3 +7,4 @@ Notable non-obvious pieces:
 - `lua/plugins/claudecode.lua` wires up `coder/claudecode.nvim` (depends on `folke/snacks.nvim`) for driving Claude Code from inside Neovim; it runs the `claude` CLI (installed via the `claude-code` Homebrew cask) in an embedded terminal over the same WebSocket protocol as the official VS Code extension, bound under `<Leader>a*`.
 - `lua/keybindings.lua` is the entry point for keymaps; per-plugin keybindings live in `lua/keybindings/{dashboard,fterm,fugitive,telescope,trouble}.lua`.
 - `.chezmoiignore` excludes `lazy-lock.json` from chezmoi management (see repo-root `CLAUDE.md` for the general `.chezmoiignore` mechanism).
+- `.claude/skills/nvim-filetype-support/` is a directory-scoped Claude Code skill (see repo-root `CLAUDE.md`) for adding per-filetype LSP/lint/format/DAP/treesitter support here.

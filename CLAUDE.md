@@ -17,6 +17,7 @@ chezmoi uses filename prefixes/suffixes to encode behavior. Get these wrong and 
 - `run_before_*` / `run_after_*` (no `_once`/`_onchange`) → run on every `chezmoi apply`.
 - Ordering is lexical by the numeric prefix (`00`, `10`, `20`, `90`, `91`, `99`), which is why e.g. company-folder creation is `00` (before) and login items are `99` (after).
 - `.chezmoiignore` files scope which paths under a directory chezmoi manages (e.g. `dot_config/nvim/.chezmoiignore` excludes `lazy-lock.json`; `dot_config/karabiner/.chezmoiignore` excludes `automatic_backups`).
+- Names that already start with a literal `.` (not `dot_`) are passed through verbatim rather than requiring translation — this is how the repo-root `.claude/` deploys to `~/.claude`, and why a `.claude/` nested under a `dot_*` subtree (e.g. `dot_config/nvim/.claude/`) deploys under that subtree instead.
 
 Common commands (run from anywhere, chezmoi finds the source dir):
 - `chezmoi apply` — render templates and run applicable `run_*` scripts against `~`.
@@ -46,6 +47,10 @@ Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshen
 ## Per-tool docs
 
 Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads automatically once it touches a file in that subtree: `dot_zsh/CLAUDE.md`, `dot_config/nvim/CLAUDE.md`, `dot_hammerspoon/CLAUDE.md`, `dot_config/karabiner/CLAUDE.md`.
+
+## Claude Code skills (`.claude/skills/`)
+
+Repo-root `.claude/skills/` holds skills available everywhere. A skill only relevant to one subtree belongs in a `.claude/skills/` nested inside that subtree instead (e.g. nvim-specific skills live in `dot_config/nvim/.claude/skills/`, not the root) — Claude Code scopes it there, and the more specific skill wins if a same-named one exists at both levels.
 
 ## Editing templates
 
