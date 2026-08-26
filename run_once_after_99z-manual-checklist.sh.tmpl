@@ -1,0 +1,32 @@
+#!/bin/bash
+# Last script in the bootstrap (99z sorts after 99-loginitems). Surfaces the manual steps
+# chezmoi can't perform -- macOS TCC grants and account logins -- so they don't get missed
+# after a fresh apply. run_once: shows on a new machine, not on every apply.
+set -euo pipefail
+
+checklist="{{ .chezmoi.sourceDir }}/MANUAL-SETUP.md"
+
+bold=$'\033[1m'
+dim=$'\033[2m'
+yellow=$'\033[1;33m'
+reset=$'\033[0m'
+
+printf '\n%s%s%s\n' "$yellow" "────────────────────────────────────────────────────────" "$reset"
+printf '%s  chezmoi apply is done -- manual steps remain%s\n' "$bold" "$reset"
+printf '%s%s%s\n\n' "$yellow" "────────────────────────────────────────────────────────" "$reset"
+
+if [ -f "$checklist" ]; then
+  # Section headings only; the file itself has the detail.
+  grep '^## ' "$checklist" | sed 's/^## /  • /'
+  printf '\n%sFull checklist:%s %s\n' "$bold" "$reset" "$checklist"
+  printf '%sMost of it is macOS Privacy & Security grants that cannot be scripted.%s\n' "$dim" "$reset"
+else
+  printf '  %sMANUAL-SETUP.md not found at %s%s\n' "$dim" "$checklist" "$reset"
+fi
+
+# Only block when a human is actually watching; a non-interactive apply must not hang.
+if [ -t 0 ]; then
+  printf '\n%sPress Enter to continue.%s ' "$bold" "$reset"
+  read -r _
+  printf '\n'
+fi

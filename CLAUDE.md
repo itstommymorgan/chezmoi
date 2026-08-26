@@ -39,6 +39,7 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 6. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
 7. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
 8. `run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
+9. `run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
 
 ## Shell (zsh)
 
@@ -52,12 +53,14 @@ Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads 
 
 Two distinct things share the `.claude` name here, and conflating them is the easy mistake:
 
-- **`dot_claude/`** → applied to `~/.claude`. This is *global user config* for Claude Code itself (`settings.json`, `keybindings.json`, `statusline-command.sh`, `CLAUDE.md`, `themes/`). Its `.chezmoiignore` is an allowlist (`*` then `!`-exceptions), so **a new file here is ignored until explicitly allowlisted**. Everything else under `~/.claude` (sessions, projects, auto memory, plugins) is machine-local runtime state and deliberately unmanaged.
+- **`dot_claude/`** → applied to `~/.claude`. This is *global user config* for Claude Code itself (`modify_settings.json`, `keybindings.json`, `statusline-command.sh`, `CLAUDE.md`, `themes/`). Its `.chezmoiignore` is an allowlist (`*` then `!`-exceptions), so **a new file here is ignored until explicitly allowlisted**. Everything else under `~/.claude` (sessions, projects, auto memory, plugins) is machine-local runtime state and deliberately unmanaged.
 - **`.claude/`** (repo root, and nested ones like `dot_config/nvim/.claude/`) → chezmoi-invisible, never applied. This is *this repo's own* Claude Code config: skills, settings.local.json.
 
 Note the root `.chezmoiignore` blocks `**/CLAUDE.md` to keep repo docs out of `~`, with a single negation for `.claude/CLAUDE.md` (the user-scope one). Patterns there match **target** paths, so the negation reads `.claude/`, not `dot_claude/`.
 
-**`~/.claude/settings.json` is written by Claude Code itself at runtime** — `/model`, `/theme`, and `/config` toggles all edit it in place. `chezmoi apply` will then report "has changed since chezmoi last wrote it" and would revert those edits. After changing settings through Claude Code's UI, run `chezmoi re-add ~/.claude/settings.json` to pull them back into source. Before ever forcing an apply over it, diff deployed against source (`diff <(jq -S . ~/.claude/settings.json) <(jq -S . dot_claude/settings.json)`) to see what would be lost.
+**`~/.claude/settings.json` is co-managed**, because Claude Code rewrites it at runtime (`/model`, `/theme`, `/config` toggles). It is therefore not a static source file but a `modify_` script, `dot_claude/modify_settings.json`: chezmoi pipes the live file in on stdin and takes the script's stdout as the new contents (stdin is empty on a fresh machine, so the script generates the whole file). The script jq-merges a block of repo-declared keys over the live file.
+
+The contract: **keys declared in that script are repo-authoritative and overwrite live values; every other key is preserved untouched.** So a `/theme` change gets reverted on the next apply (theme is declared), while an undeclared key Claude Code invents later survives. To let a key float, delete it from the `managed` block. Edit settings by editing that script, not with `chezmoi re-add`.
 
 ### Choosing between CLAUDE.md, rules, and skills
 

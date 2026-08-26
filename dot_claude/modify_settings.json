@@ -1,3 +1,13 @@
+#!/bin/bash
+# ~/.claude/settings.json is co-managed: Claude Code rewrites it at runtime (/model, /theme,
+# /config toggles), so a plain source file would silently revert those on the next apply.
+# As a modify_ script, chezmoi hands us the live file on stdin (empty on a fresh machine).
+# Contract: keys declared below are repo-authoritative and overwrite the live values; every
+# other key in the live file is preserved untouched. Move a key out of here to let it float.
+set -euo pipefail
+
+managed=$(
+  cat <<'JSON'
 {
   "$schema": "https://www.schemastore.org/claude-code-settings.json",
   "statusLine": {
@@ -55,3 +65,17 @@
     ]
   }
 }
+JSON
+)
+
+live=$(cat)
+if [ -z "${live//[[:space:]]/}" ]; then
+  live='{}'
+elif ! jq -e . >/dev/null 2>&1 <<<"$live"; then
+  echo "modify_settings.json: live ~/.claude/settings.json is not valid JSON; refusing to overwrite it" >&2
+  exit 1
+fi
+
+# `*` deep-merges objects with the right-hand side winning; arrays are replaced wholesale,
+# which is what we want for autoMode.environment and hooks. -S keeps output deterministic.
+jq -S --argjson managed "$managed" '. * $managed' <<<"$live"

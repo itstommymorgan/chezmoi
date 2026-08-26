@@ -4,3 +4,7 @@ CLAUDE.md
 **/CLAUDE.md
 # ...except the user-scope one, which is genuine global Claude Code config.
 !.claude/CLAUDE.md
+
+# Repo docs. Root-level non-`dot_` files ARE applied to ~ by default (that's how ~/Brewfile
+# got there), so anything meant to stay repo-only needs listing here.
+MANUAL-SETUP.md
