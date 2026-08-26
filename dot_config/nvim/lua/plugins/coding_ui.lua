@@ -19,6 +19,8 @@ return {
         "embedded_template",
         "css",
         "scss",
+        "javascript",
+        "typescript",
       })
 
       -- folds start open; foldmethod=expr defaults to all-closed otherwise

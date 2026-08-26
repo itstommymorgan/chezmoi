@@ -40,6 +40,10 @@ return {
         "css-lsp",
         "some-sass-language-server",
         "stylelint",
+        -- JavaScript/TypeScript/Node
+        "typescript-language-server",
+        "eslint-lsp",
+        "js-debug-adapter",
       },
       auto_update = true,
       run_on_start = true,

@@ -101,6 +101,44 @@ return {
     require("nvim-dap-virtual-text").setup()
     require("dap-ruby").setup()
 
+    -- js-debug-adapter's own nvim companion plugin is abandoned (no
+    -- commits since 2023); the wiring itself is simple enough (spawn as
+    -- a DAP server on a port, no port-picking/env-var/preset complexity
+    -- like rdbg needed) to hand-roll directly instead
+    local js_debug_path = vim.fs.joinpath(
+      require("mason-registry").get_package("js-debug-adapter"):get_install_path(),
+      "js-debug",
+      "src",
+      "dapDebugServer.js"
+    )
+    dap.adapters["pwa-node"] = {
+      type = "server",
+      host = "localhost",
+      port = "${port}",
+      executable = {
+        command = "node",
+        args = { js_debug_path, "${port}" },
+      },
+    }
+    local js_configurations = {
+      {
+        type = "pwa-node",
+        request = "launch",
+        name = "Launch file",
+        program = "${file}",
+        cwd = "${workspaceFolder}",
+      },
+      {
+        type = "pwa-node",
+        request = "attach",
+        name = "Attach to process",
+        processId = require("dap.utils").pick_process,
+        cwd = "${workspaceFolder}",
+      },
+    }
+    dap.configurations.javascript = js_configurations
+    dap.configurations.typescript = js_configurations
+
     -- open/close the UI automatically alongside a debug session
     dap.listeners.after.event_initialized["dapui_config"] = function()
       dapui.open()

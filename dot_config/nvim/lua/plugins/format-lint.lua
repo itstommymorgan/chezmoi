@@ -6,12 +6,14 @@ return {
       formatters_by_ft = {
         bash = { "shfmt" },
         css = { "prettier" },
+        javascript = { "prettier" },
         json = { "prettier" },
         jsonc = { "prettier" },
         lua = { "stylua" },
         ruby = { "rubocop" },
         scss = { "prettier" },
         sh = { "shfmt" },
+        typescript = { "prettier" },
         -- explicit (not LSP fallback): chezmoi-template.nvim's masked-format
         -- bridge formats via a scratch buffer with no LSP attached
         toml = { "taplo" },
