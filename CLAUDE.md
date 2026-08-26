@@ -32,14 +32,15 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 ## Provisioning flow (fresh machine bootstrap order)
 
 1. `run_once_before_20-use-1password-for-ssh.sh.tmpl` — interactively walks through enabling the 1Password SSH agent (blocks on user confirmation).
-2. `run_once_before_99-disable-spotlight-shortcut.sh.tmpl` — frees the Spotlight shortcut via `PlistBuddy`.
-3. `run_onchange_before_10-install-homebrew.sh.tmpl` — installs Xcode CLT, Homebrew, Rosetta (arm64 only), runs `brew bundle` against `Brewfile`, and sets the machine hostname.
-4. `run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
-5. `run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
-6. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
-7. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
-8. `run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
-9. `run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
+2. `run_before_25-ensure-1password.sh` — failsafe: launches 1Password in the background (`open -g -j`) if it isn't running. `op` only resolves secrets while the desktop app is up, and `dot_ssh/id_ed25519.pub.tmpl` calls `onepasswordRead`; since targets apply alphabetically, a failure under `.ssh/` aborts every `after_` script behind it. Never exits non-zero — on a fresh machine 1Password legitimately isn't set up yet, and blocking bootstrap would be worse. 1Password is also in the login items list so this should rarely fire.
+3. `run_once_before_99-disable-spotlight-shortcut.sh.tmpl` — frees the Spotlight shortcut via `PlistBuddy`.
+4. `run_onchange_before_10-install-homebrew.sh.tmpl` — installs Xcode CLT, Homebrew, Rosetta (arm64 only), runs `brew bundle` against `Brewfile`, and sets the machine hostname.
+5. `run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
+6. `run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
+7. `run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
+8. `run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
+9. `run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
+10. `run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
 
 ## Shell (zsh)
 
