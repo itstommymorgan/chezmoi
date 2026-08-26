@@ -1,4 +1,5 @@
 **/tags
 **/.claude/settings.local.json
+**/.claude/worktrees/**
 config/definitions.rb
 .tmuxinator.yml
