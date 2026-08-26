@@ -4,7 +4,7 @@ return {
   enable_scroll_bar = false,
   font = wezterm.font("FiraCode Nerd Font"),
   font_size = 16,
-  harfbuzz_features = { "ss02", "ss06", "ss07", "ss08", "zero" },
+  harfbuzz_features = { "ss02", "ss06", "ss07", "zero" },
   hide_tab_bar_if_only_one_tab = true,
   window_decorations = "RESIZE",
   window_frame = {
