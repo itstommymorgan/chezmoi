@@ -17,7 +17,7 @@ chezmoi uses filename prefixes/suffixes to encode behavior. Get these wrong and 
 - `run_before_*` / `run_after_*` (no `_once`/`_onchange`) → run on every `chezmoi apply`.
 - Ordering is lexical by the numeric prefix (`00`, `10`, `20`, `90`, `91`, `99`), which is why e.g. company-folder creation is `00` (before) and login items are `99` (after).
 - `.chezmoiignore` files scope which paths under a directory chezmoi manages (e.g. `dot_config/nvim/.chezmoiignore` excludes `lazy-lock.json`; `dot_config/karabiner/.chezmoiignore` excludes `automatic_backups`).
-- Names that already start with a literal `.` (not `dot_`) are passed through verbatim rather than requiring translation — this is how the repo-root `.claude/` deploys to `~/.claude`, and why a `.claude/` nested under a `dot_*` subtree (e.g. `dot_config/nvim/.claude/`) deploys under that subtree instead.
+- Any path component starting with a literal `.` (not `dot_`) is invisible to chezmoi — it's never applied, anywhere in the tree. This is why global Claude Code settings live in `dot_claude/` (translated to `~/.claude`, scoped down by its own `.chezmoiignore` to just `settings.json`, `statusline-command.sh`, `keybindings.json`) rather than a literal `.claude/`, and why the repo-root `.claude/` and any nested `.claude/` (e.g. `dot_config/nvim/.claude/`) are safe, chezmoi-invisible spots for Claude Code's own project config/skills.
 
 Common commands (run from anywhere, chezmoi finds the source dir):
 - `chezmoi apply` — render templates and run applicable `run_*` scripts against `~`.
