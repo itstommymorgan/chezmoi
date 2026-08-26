@@ -114,6 +114,15 @@
                                 },
                                 "to": [{ "key_code": "right_arrow" }],
                                 "type": "basic"
+                            },
+                            {
+                                "description": "Return-held + o = shift+return (newline without submitting)",
+                                "from": {
+                                    "key_code": "o",
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
+                                },
+                                "to": [{ "key_code": "return_or_enter", "modifiers": ["left_shift"] }],
+                                "type": "basic"
                             }
                         ]
                     },
