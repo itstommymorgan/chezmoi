@@ -1,2 +1,6 @@
+# Repo/project documentation for Claude Code -- belongs in the repo, never applied to ~.
+# Patterns match TARGET paths, so the negation below is `.claude/`, not `dot_claude/`.
 CLAUDE.md
 **/CLAUDE.md
+# ...except the user-scope one, which is genuine global Claude Code config.
+!.claude/CLAUDE.md

@@ -48,9 +48,22 @@ Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshen
 
 Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads automatically once it touches a file in that subtree: `dot_zsh/CLAUDE.md`, `dot_config/nvim/CLAUDE.md`, `dot_hammerspoon/CLAUDE.md`, `dot_config/karabiner/CLAUDE.md`.
 
-## Claude Code skills (`.claude/skills/`)
+## Claude Code config in this repo
 
-Repo-root `.claude/skills/` holds skills available everywhere. A skill only relevant to one subtree belongs in a `.claude/skills/` nested inside that subtree instead (e.g. nvim-specific skills live in `dot_config/nvim/.claude/skills/`, not the root) — Claude Code scopes it there, and the more specific skill wins if a same-named one exists at both levels.
+Two distinct things share the `.claude` name here, and conflating them is the easy mistake:
+
+- **`dot_claude/`** → applied to `~/.claude`. This is *global user config* for Claude Code itself (`settings.json`, `keybindings.json`, `statusline-command.sh`, `CLAUDE.md`, `themes/`). Its `.chezmoiignore` is an allowlist (`*` then `!`-exceptions), so **a new file here is ignored until explicitly allowlisted**. Everything else under `~/.claude` (sessions, projects, auto memory, plugins) is machine-local runtime state and deliberately unmanaged.
+- **`.claude/`** (repo root, and nested ones like `dot_config/nvim/.claude/`) → chezmoi-invisible, never applied. This is *this repo's own* Claude Code config: skills, settings.local.json.
+
+Note the root `.chezmoiignore` blocks `**/CLAUDE.md` to keep repo docs out of `~`, with a single negation for `.claude/CLAUDE.md` (the user-scope one). Patterns there match **target** paths, so the negation reads `.claude/`, not `dot_claude/`.
+
+**`~/.claude/settings.json` is written by Claude Code itself at runtime** — `/model`, `/theme`, and `/config` toggles all edit it in place. `chezmoi apply` will then report "has changed since chezmoi last wrote it" and would revert those edits. After changing settings through Claude Code's UI, run `chezmoi re-add ~/.claude/settings.json` to pull them back into source. Before ever forcing an apply over it, diff deployed against source (`diff <(jq -S . ~/.claude/settings.json) <(jq -S . dot_claude/settings.json)`) to see what would be lost.
+
+### Choosing between CLAUDE.md, rules, and skills
+
+- **`CLAUDE.md`** — always loaded for its directory and below. Facts that apply to every session in that subtree. The nested per-tool files (`dot_zsh/`, `dot_config/nvim/`, …) already scope themselves this way: they load on demand when Claude reads a file in that subtree, so they need no extra path scoping.
+- **`.claude/rules/*.md`** — same as CLAUDE.md, but supports `paths:` frontmatter (globs) to load only when Claude touches matching files. Worth reaching for only if instructions need to follow a *file pattern* that cuts across directories; the per-directory CLAUDE.md split above already covers the directory case, so don't convert those to rules.
+- **`.claude/skills/`** — multi-step procedures, loaded on demand rather than every session. A skill only relevant to one subtree belongs in a nested `.claude/skills/` inside it (e.g. `dot_config/nvim/.claude/skills/`); the more specific skill wins if a same-named one exists at both levels.
 
 ## Editing templates
 

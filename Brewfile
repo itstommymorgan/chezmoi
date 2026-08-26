@@ -9,6 +9,7 @@ brew "eza"
 brew "fd"
 brew "gh"
 brew "git"
+brew "jq" # required by dot_claude/executable_statusline-command.sh
 brew "loginitems"
 brew "mise"
 brew "neovim"
