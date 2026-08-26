@@ -43,7 +43,7 @@ require("launch_or_focus")
 require("chrome_tab_automation")
 
 -- window grid
-require("my_grid")
+local my_grid = require("my_grid")
 
 if ext.config.meeting_checks then
   require("meeting_checks")
