@@ -30,6 +30,10 @@ return {
         -- YAML
         "yaml-language-server",
         "yamllint",
+        -- Ruby
+        "ruby-lsp",
+        "rubocop",
+        "rdbg",
       },
       auto_update = true,
       run_on_start = true,
@@ -37,7 +41,11 @@ return {
   },
   {
     "mason-org/mason-lspconfig.nvim",
-    opts = {},
+    opts = {
+      -- rubocop also ships its own LSP mode; auto-enabling it duplicates
+      -- every diagnostic already produced by nvim-lint's standalone rubocop
+      automatic_enable = { exclude = { "rubocop" } },
+    },
     dependencies = {
       "mason-org/mason.nvim",
       "neovim/nvim-lspconfig",

@@ -8,6 +8,7 @@ return {
         json = { "prettier" },
         jsonc = { "prettier" },
         lua = { "stylua" },
+        ruby = { "rubocop" },
         sh = { "shfmt" },
         -- explicit (not LSP fallback): chezmoi-template.nvim's masked-format
         -- bridge formats via a scratch buffer with no LSP attached
@@ -48,6 +49,7 @@ return {
       lint.linters_by_ft = {
         sh = { "shellcheck" },
         markdown = { "markdownlint-cli2" },
+        ruby = { "rubocop" },
         yaml = { "yamllint" },
       }
       vim.api.nvim_create_autocmd({ "BufWritePost" }, {

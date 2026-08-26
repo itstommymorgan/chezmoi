@@ -7,6 +7,10 @@ return {
     "nvim-neotest/nvim-nio",
     "rcarriga/nvim-dap-ui",
     "theHamsta/nvim-dap-virtual-text",
+    -- rdbg adapter wiring (port allocation, RUBY_DEBUG_* env launch,
+    -- Rails/RSpec/Minitest presets) is fiddly enough to be worth a
+    -- dedicated plugin rather than hand-rolling
+    "suketa/nvim-dap-ruby",
   },
   keys = {
     { "<leader>d", nil, desc = "Debug" },
@@ -95,6 +99,7 @@ return {
 
     dapui.setup()
     require("nvim-dap-virtual-text").setup()
+    require("dap-ruby").setup()
 
     -- open/close the UI automatically alongside a debug session
     dap.listeners.after.event_initialized["dapui_config"] = function()
