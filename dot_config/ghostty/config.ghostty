@@ -1,0 +1,27 @@
+# Font settings kept in sync with dot_config/wezterm/wezterm.lua.
+
+theme = Dracula
+
+# Ghostty only exposes the Mono variant of the Nerd Font patch.
+font-family = FiraCode Nerd Font Mono
+font-size = 16
+# ss02 <= >=, ss06 \\, ss07 =~ !~, zero slashed 0
+font-feature = ss02, ss06, ss07, zero
+
+# At zero padding the top-left cell hugs the frame and the rounded window
+# corner clips it. Balance spreads the leftover sub-cell space across edges.
+window-padding-x = 8
+window-padding-y = 6
+window-padding-balance = true
+# wezterm's window_decorations = "RESIZE": no titlebar, window still resizable.
+# Costs titlebar dragging -- use option+click on the frame instead.
+macos-titlebar-style = hidden
+
+# Homebrew owns the cask, so Sparkle shouldn't update it out from under brew.
+auto-update = off
+
+# Option as Alt so zsh word motions (alt+b/alt+f) reach the shell.
+macos-option-as-alt = true
+window-save-state = always
+confirm-close-surface = false
+mouse-hide-while-typing = true
