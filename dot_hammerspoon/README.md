@@ -210,6 +210,27 @@ the spoon table into that first argument instead of erroring.
 do that as a side effect of being required; without it every window move animates,
 windowpaner's included.
 
+### Screenshots
+
+`hyper s` runs `screencapture -i -c`: crosshair, drag, image on the clipboard. Same
+thing `Cmd+Ctrl+Shift+4` does natively — bound here so it lives with the rest of the
+hyper key rather than being a separate thing to remember. (The resizable box people
+end up fighting is `Cmd+Shift+5`/Screenshot.app, a different mechanism.)
+
+It needs no Screen Recording grant: interactive capture is done by the system's own
+selection UI, so Hammerspoon's existing permissions suffice. Only the programmatic
+forms (`-R` and friends) require it, and they fail with "could not create image from
+rect" without it.
+
+Run via `hs.task`, not `hs.execute` — `screencapture -i` doesn't return until the
+selection finishes, which would freeze Hammerspoon's runloop while the crosshair is up.
+
+Two `com.apple.screencapture` defaults matter here and are set by
+`.chezmoiscripts/before/run_once_before_98-screenshot-defaults.sh`: `target` is
+`clipboard`, and `show-thumbnail` is **off**. That second one is what makes stock
+macOS screenshots feel broken — the floating thumbnail holds the capture for ~5
+seconds, so pasting immediately after a screenshot gets nothing.
+
 ### URL routing
 
 `url_routing.lua` makes Hammerspoon the system `http`/`https` handler and dispatches
@@ -250,6 +271,7 @@ All prefixed with the hyper key (a held `right_command`).
 | --- | --- |
 | `space` | Toggle microphone mute |
 | `m` | Center the mouse on the active window |
+| `s` | Screenshot: crosshair, drag, straight to the clipboard |
 | `g b` / `g t` | Zen / Ghostty |
 | `g c` / `g d` / `g m` / `g o` / `g s` / `g u` | Notion Calendar / Todoist / Mimestream / Obsidian / Slack / Spotify |
 | `g i b` / `g i m` | Beeper / Messages |

@@ -126,6 +126,32 @@ end
 -- Dot-called, not colon: these are hs.fnutils.partial bindings over
 -- resizeCurrentWindow(how, use_frame_correctness), and undo/center/toggleMaximized
 -- take a window. A colon call would pass the spoon table into that first argument.
+-- Interactive region capture straight to the clipboard -- the same thing
+-- Cmd+Ctrl+Shift+4 does natively, bound here so it sits with everything else under
+-- the hyper key.
+--
+-- hs.task rather than hs.execute: `screencapture -i` does not return until the
+-- selection is finished, which would freeze Hammerspoon's runloop for as long as
+-- the crosshair is up.
+--
+-- No Screen Recording grant needed. Interactive capture is performed by the system's
+-- own selection UI, so it works on Hammerspoon's existing permissions -- only the
+-- programmatic forms (-R and friends) require Screen Recording, and those fail with
+-- "could not create image from rect" without it. Verified.
+--
+-- Cancelling a selection exits non-zero with nothing on stderr, so only a message
+-- there counts as a real failure worth surfacing.
+local function screenshotToClipboard()
+  hs.task
+    .new("/usr/sbin/screencapture", function(code, _, err)
+      if code ~= 0 and err and err:gsub("%s+", "") ~= "" then
+        ext.log:w("screenshot failed: " .. err:gsub("%s+$", ""))
+        hs.alert.show("Screenshot failed - see the Hammerspoon console")
+      end
+    end, { "-i", "-c" })
+    :start()
+end
+
 local function windowAction(method)
   return function()
     spoon.WindowHalfsAndThirds[method]()
@@ -187,6 +213,7 @@ ext.utils.keybinder({
     },
   },
   { key = "m", comment = "Center Mouse", fun = ext.app.centerMouseOnActiveWindow },
+  { key = "s", comment = "Screenshot", fun = screenshotToClipboard },
   {
     key = "t",
     comment = "Toggle...",
