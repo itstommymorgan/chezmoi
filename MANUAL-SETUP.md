@@ -89,6 +89,8 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
       Electron app (`com.cron.electron`) with no preferences plist and no config file: its
       entire state is the Electron user-data directory, which is session and cache data.
       Nothing here is chezmoi-manageable.
+- [ ] **Mimestream** — sign in with Google. Gmail-API based, so labels, filters, and
+      search behave as they do in Gmail proper; nothing about it is dotfile-manageable.
 - [ ] Obsidian — open the vault from Dropbox once it has synced
 - [ ] **Wispr Flow** — launch and configure; it ships no config until first run, and none of it
       is dotfile-manageable.

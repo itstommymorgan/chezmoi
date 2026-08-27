@@ -36,6 +36,7 @@ cask "ghostty"
 cask "hammerspoon"
 cask "karabiner-elements"
 cask "jordanbaird-ice"
+cask "mimestream" # native Gmail client; keeps mail out of an always-on browser tab
 cask "notion"
 cask "notion-calendar"
 cask "obs"
