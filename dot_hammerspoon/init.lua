@@ -50,6 +50,9 @@ require("launch_or_focus")
 -- Do Not Disturb, via the Shortcuts in MANUAL-SETUP.md
 require("focus")
 
+-- dismiss notifications through the accessibility tree
+require("notifications")
+
 -- window grid
 local my_grid = require("my_grid")
 
@@ -129,26 +132,7 @@ ext.utils.keybinder({
         end,
       },
       { key = "d", comment = "Do Not Disturb", fun = ext.focus.toggle },
-      {
-        key = "n",
-        comment = "close Notifications",
-        fun = function()
-          hs.execute("osascript -e '" .. [[my closeNotifications()
-            on closeNotifications()
-              tell application "System Events" to tell process "Notification Center"
-                set theWindows to every window
-                repeat with i from 1 to number of items in theWindows
-                  set this_item to item i of theWindows
-                  try
-                    click button 1 of this_item
-                  on error
-                    my closeNotifications()
-                  end try
-                end repeat
-              end tell
-            end closeNotifications]] .. "'")
-        end,
-      },
+      { key = "n", comment = "close Notifications", fun = ext.notifications.dismissAll },
       {
         key = "s",
         comment = "Shade",
