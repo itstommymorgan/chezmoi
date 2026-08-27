@@ -195,11 +195,41 @@ somewhere else the moment displays get rearranged in System Settings. An integer
 still works as a fallback. A rule naming a screen that isn't attached logs and
 leaves the window alone.
 
-### My grid
+### Window management
 
-See `my_grid.lua`. This is again _largely_ stolen, but it sets up a 4x4 window
-grid whose halves are bound under `hyper w`. Not a big part of my workflow, but
-it's there when I need it.
+`WindowHalfsAndThirds.spoon`, replacing the old hand-rolled `my_grid.lua` which did
+halves and quarters only and had no undo. Bound under `hyper w`: `h/j/k/l` for halves,
+`w t` for the thirds submap, plus center, full-screen toggle and undo.
+
+Its methods must be **dot**-called, not colon-called — the halves and thirds are
+`hs.fnutils.partial` bindings over `resizeCurrentWindow(how, use_frame_correctness)`,
+and `undo`/`center`/`toggleMaximized` take a window, so a colon call quietly passes
+the spoon table into that first argument instead of erroring.
+
+`init.lua` also sets `hs.window.animationDuration = 0` explicitly. `my_grid` used to
+do that as a side effect of being required; without it every window move animates,
+windowpaner's included.
+
+### URL routing
+
+`url_routing.lua` makes Hammerspoon the system `http`/`https` handler and dispatches
+by pattern via `URLDispatcher.spoon`: Zoom, Spotify, Notion and Todoist go to their
+apps, everything else to Zen. Zoom is the one that earns its keep — `zoom.us/j/`
+links exist only to bounce you through a browser page into the app.
+
+Tracking parameters (`utm_*`, `fbclid`, `gclid`, …) are stripped before dispatch, so
+a URL copied from the address bar afterwards is already clean. Slack's
+`slack-redir.net` wrapping is undone by the spoon itself.
+
+Owning the default browser is less fragile than it sounds: `setRestoreHandler` hands
+`http` back to Zen whenever Hammerspoon exits *or reloads its config*, so a config
+that fails to load leaves links opening in Zen rather than disappearing.
+
+Routing into a specific Zen **workspace** is not wired up. Zen has no scheme or flag
+for workspaces and external links land in the last-active one; the only documented
+path is via containers, and whether `ext+container:` resolves when the OS hands it to
+Zen is untested. `ext.urls.openInZenContainer` is there for when it's tried — see
+`MANUAL-SETUP.md`.
 
 ## Bindings
 
@@ -216,4 +246,6 @@ All prefixed with the hyper key (a held `right_command`).
 | `h c` / `h e` | Hammerspoon console / edit `init.lua` |
 | `t c` / `t d` / `t n` / `t s` | Caffeinate / Do Not Disturb / dismiss notifications / Shade |
 | `w 1` / `w 2` / `w 3` | Move the focused window to screen N |
-| `w h` / `w j` / `w k` / `w l` | Move the focused window to the left / bottom / top / right half |
+| `w h` / `w j` / `w k` / `w l` | Focused window to the left / bottom / top / right half |
+| `w t` then `h/j/k/l` | …to the left / bottom / top / right third |
+| `w c` / `w f` / `w u` | Center / full-screen toggle / undo the last resize |
