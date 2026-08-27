@@ -52,6 +52,16 @@ Todoist grabs the binding by default.
 ## 5. Terminal
 
 - [ ] Launch **Ghostty** once and make it the default terminal.
+- [ ] Switch the login shell to the Homebrew zsh. Apple's `/bin/zsh` is frozen at 5.9 and
+      gets no upstream fixes; the Brewfile already installs the current one. Needs `sudo`
+      and a password prompt, which is why it isn't a `run_` script:
+
+      ```sh
+      echo "$(brew --prefix)/bin/zsh" | sudo tee -a /etc/shells
+      chsh -s "$(brew --prefix)/bin/zsh"
+      ```
+
+      Open a new terminal and confirm with `echo $SHELL`.
 
 ## 6. Browser (Zen)
 
