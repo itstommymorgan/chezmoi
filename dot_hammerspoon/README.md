@@ -217,6 +217,17 @@ by pattern via `URLDispatcher.spoon`: Zoom, Spotify, Notion and Todoist go to th
 apps, everything else to Zen. Zoom is the one that earns its keep — `zoom.us/j/`
 links exist only to bounce you through a browser page into the app.
 
+Two things guard against hijacking a URL that only *mentions* a routed app.
+URLDispatcher matches patterns against the whole URL, so a bare `notion%.so` also
+matches an OAuth `redirect_uri` pointing at Notion — which broke logging into Notion
+Calendar, sending the Google sign-in page to the Notion app. Patterns are therefore
+anchored at the scheme so they can only match the authority section, in two variants
+per domain (the domain itself, and any subdomain — the literal dot in the subdomain
+form is what stops `fakenotion.so` matching). Separately, a first rule sends anything
+that looks like a sign-in flow to the browser, since handing one to an app drops the
+session mid-establishment. That rule is deliberately loose: a false positive only
+means "opened in the browser", which is the default anyway.
+
 Tracking parameters (`utm_*`, `fbclid`, `gclid`, …) are stripped before dispatch, so
 a URL copied from the address bar afterwards is already clean. Slack's
 `slack-redir.net` wrapping is undone by the spoon itself.

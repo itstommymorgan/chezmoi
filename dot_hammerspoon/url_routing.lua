@@ -55,12 +55,68 @@ spoon.URLDispatcher.url_redir_decoders = {
   { "strip tracking params", stripTracking, nil, true },
 }
 
+-- URLDispatcher matches patterns against the *whole* URL, so a bare "notion%.so"
+-- also matches a URL that merely mentions notion.so in a query parameter -- which
+-- is exactly what an OAuth redirect_uri looks like. Anchoring at the scheme
+-- restricts the match to the authority section.
+--
+-- Two variants per domain: the domain itself, and any subdomain of it. The literal
+-- dot in the subdomain form is what stops "fakenotion.so" matching "notion.so".
+local function host(domain, path)
+  local d = domain:gsub("%.", "%%.")
+  if path then
+    return { "^https?://" .. d .. path, "^https?://[%w%-%.]+%." .. d .. path }
+  end
+  return {
+    "^https?://" .. d .. "[/:?#]",
+    "^https?://" .. d .. "$",
+    "^https?://[%w%-%.]+%." .. d .. "[/:?#]",
+    "^https?://[%w%-%.]+%." .. d .. "$",
+  }
+end
+
+local function concat(...)
+  local out = {}
+  for _, list in ipairs({ ... }) do
+    for _, v in ipairs(list) do
+      out[#out + 1] = v
+    end
+  end
+  return out
+end
+
+-- Sign-in flows have to finish in the browser: handing one to an app drops the
+-- session it was in the middle of establishing. This is deliberately loose, because
+-- a false positive here only means "opened in the browser", which is the default
+-- anyway. It has to come first -- the spoon takes the first matching rule.
+local AUTH_PATTERNS = {
+  "/oauth",
+  "/o/oauth2",
+  "/authorize",
+  "/auth/",
+  "/login",
+  "/signin",
+  "/sign%-in",
+  "/sso",
+  "/saml",
+  "/callback",
+  "accounts%.google%.com",
+  "appleid%.apple%.com",
+  "login%.microsoftonline%.com",
+}
+
 spoon.URLDispatcher.url_patterns = {
-  -- Zoom's web links exist only to bounce you into the app through an interstitial.
-  { { "zoom%.us/j/", "zoom%.us/s/", "zoom%.us/my/", "zoom%.us/w/" }, "us.zoom.xos" },
-  { "open%.spotify%.com", "com.spotify.client" },
-  { "notion%.so", "notion.id" },
-  { "todoist%.com", "com.todoist.mac.Todoist" },
+  { AUTH_PATTERNS, BROWSER },
+
+  -- Zoom's web links exist only to bounce you through an interstitial into the app.
+  -- Path-scoped so the rest of zoom.us, including the web client, stays in Zen.
+  {
+    concat(host("zoom.us", "/j/"), host("zoom.us", "/s/"), host("zoom.us", "/my/"), host("zoom.us", "/w/")),
+    "us.zoom.xos",
+  },
+  { host("spotify.com"), "com.spotify.client" },
+  { host("notion.so"), "notion.id" },
+  { host("todoist.com"), "com.todoist.mac.Todoist" },
 }
 
 -- Put Zen back when Hammerspoon exits or reloads. This is the safety net described
