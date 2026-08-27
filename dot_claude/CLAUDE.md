@@ -53,6 +53,21 @@ project's own `CLAUDE.md`, not here.
 - Correct earlier mistakes plainly and move on. No preamble, no self-flagellation.
 - Edit existing files rather than creating new ones unless a new file is genuinely warranted.
 
+## Project todos
+
+- Personal, project-scoped todos live in a `.todo.md` at the project root. It is gitignored
+  globally, so it stays out of every repo's history unless force-added.
+- Read it when starting multi-step work in a project, and check items off as you finish
+  them. Prefer it over any external task tracker for project work.
+- A subdirectory may keep its own `.todo.md` when its backlog gets big enough to crowd the
+  root file. Resolve the one nearest the files you're working on, walking up to the git
+  root; `grep -rn --include='.todo.md'` from the root sees all of them at once.
+- Format is flat GFM so it stays cheap to read and safe to edit line-wise: `## Now`,
+  `## Next`, `## Blocked`, `## Done` headings, one `- [ ]` per item, newest first within a
+  section, no nesting past one level. Items may carry a `(path/to/file.lua:42)` reference.
+  Stamp items with the date when moving them to `## Done`, and prune that section when it
+  grows long.
+
 ## Comments and prose
 
 - Keep comments terse. Comment the non-obvious *why*, never restate what the code does.

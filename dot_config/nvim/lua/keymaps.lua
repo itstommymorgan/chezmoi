@@ -47,3 +47,16 @@ for count = 1, #search_keys do
   local key = search_keys[count]
   vim.keymap.set("n", key, key .. "zz", { silent = true, remap = true })
 end
+
+-- <Leader>T* works the project todo list (see lua/todo.lua)
+vim.keymap.set("n", "<Leader>Tt", function()
+  require("todo").open()
+end, { desc = "Open project todo" })
+
+vim.keymap.set("n", "<Leader>Ta", function()
+  require("todo").capture()
+end, { desc = "Add todo" })
+
+vim.keymap.set("n", "<Leader>Tp", function()
+  require("todo").pick()
+end, { desc = "Pick open todos" })

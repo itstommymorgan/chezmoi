@@ -3,3 +3,4 @@
 **/.claude/worktrees/**
 config/definitions.rb
 .tmuxinator.yml
+.todo.md
