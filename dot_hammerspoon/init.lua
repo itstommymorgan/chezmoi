@@ -96,7 +96,17 @@ ext.utils.keybinder({
       { key = "s", comment = "Slack", app = "Slack" },
       { key = "u", comment = "mUsic", toggle = "Spotify" },
       { key = "t", comment = "Terminal", app = "Ghostty" },
-      { key = "v", comment = "Video call", fun = ext.utils.jump_to_meeting },
+      {
+        key = "v",
+        comment = "Video call",
+        fun = function()
+          if ext.utils.meetings then
+            ext.utils.meetings.jump_to_meeting()
+          else
+            ext.log:i("video call shortcut called but meeting_checks is disabled")
+          end
+        end,
+      },
     },
   },
   {
