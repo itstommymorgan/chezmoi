@@ -6,6 +6,7 @@ Guidance for the plugin/custom-script layer of the zsh config. See the repo-root
 
 - To add a new interactive-only tool/alias, drop a file in `custom/`; no registration needed.
 - To add a plugin, add a line to `zsh_plugins.txt`. It regenerates on the next shell.
+- Completion behaviour is `custom/completion.zsh`; `compinit` itself runs from `plugins.zsh`, later. That ordering is fine because `zstyle`s are read at completion time, not at load.
 
 ## Plugins (antidote, static mode)
 
