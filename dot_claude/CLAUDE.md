@@ -63,10 +63,14 @@ project's own `CLAUDE.md`, not here.
   root file. Resolve the one nearest the files you're working on, walking up to the git
   root; `grep -rn --include='.todo.md'` from the root sees all of them at once.
 - Format is flat GFM so it stays cheap to read and safe to edit line-wise: `## Now`,
-  `## Next`, `## Blocked`, `## Done` headings, one `- [ ]` per item, newest first within a
-  section, no nesting past one level. Items may carry a `(path/to/file.lua:42)` reference.
-  Stamp items with the date when moving them to `## Done`, and prune that section when it
-  grows long.
+  `## Next`, `## Deferred`, `## Blocked`, `## Done` headings, one `- [ ]` per item, newest
+  first within a section, no nesting past one level. Items may carry a
+  `(path/to/file.lua:42)` reference. Stamp items with the date when moving them to `## Done`,
+  and prune that section when it grows long.
+- `## Deferred` is for work considered and consciously put off, not work merely queued —
+  that's `## Next`. Record *why* it was deferred and what would change the answer, or it
+  decays into a second Next. `## Blocked` stays distinct: blocked is waiting on something
+  external, deferred is a choice.
 
 ## Comments and prose
 

@@ -19,6 +19,8 @@ local TEMPLATE = {
   "",
   "## Next",
   "",
+  "## Deferred",
+  "",
   "## Blocked",
   "",
   "## Done",
