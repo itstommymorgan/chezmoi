@@ -96,6 +96,38 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
       `toolkit.legacyUserProfileCustomizations.stylesheets` → `true`. Zen ignores the file
       entirely without it.
 
+### URL routing
+
+Hammerspoon claims the system `http`/`https` handler (`dot_hammerspoon/url_routing.lua`) so
+Zoom, Spotify, Notion and Todoist links open in their apps and everything else falls through
+to Zen. macOS shows a one-time prompt confirming the default-browser change; approve it.
+
+Nothing needs undoing if it misbehaves: `hs.urlevent.setRestoreHandler` puts Zen back
+whenever Hammerspoon exits *or reloads its config*, so a broken config means links keep
+opening in Zen rather than disappearing. To hand it back permanently, set the default browser
+in System Settings → Desktop & Dock, or run `hs -c 'hs.urlevent.setDefaultHandler("http",
+"app.zen-browser.zen")'`.
+
+- [ ] Approve the default-browser prompt the first time Hammerspoon loads.
+
+### Optional: routing links into a specific Zen workspace
+
+Untested, and needs Zen-side setup before it can be. Zen has no URL scheme or command-line
+flag for workspaces — external links land in whichever workspace was last active
+([zen-browser/desktop#6515](https://github.com/zen-browser/desktop/issues/6515)). The only
+documented lever is indirect, through containers:
+
+- [ ] Install the **Multi-Account Containers** extension, which registers the
+      `ext+container:` URL scheme.
+- [ ] Create a container per workspace, and bind it: `about:preferences#zen` → Workspaces →
+      the workspace → Default Container.
+- [ ] Enable **"Switch to workspace where container is set as default when opening container
+      tabs"**, which is what makes opening a container tab pull its workspace forward.
+
+`ext.urls.openInZenContainer(container, url)` in `url_routing.lua` builds the URL. The
+untested part is whether `ext+container:` resolves when handed to Zen by the OS rather than
+typed inside it.
+
 ## 7. App sign-ins
 
 - [ ] Dropbox (start sync early — it takes a while)

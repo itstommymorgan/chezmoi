@@ -82,6 +82,9 @@ require("notifications")
 -- Home Assistant webhooks for the meeting watcher
 require("hass")
 
+-- Route URLs to apps rather than always to the browser
+require("url_routing")
+
 -- Window halves, thirds, corners, center and undo. Replaces the old my_grid.lua,
 -- which only did halves and quarters and had no undo.
 hs.loadSpoon("WindowHalfsAndThirds")
