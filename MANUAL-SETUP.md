@@ -84,6 +84,13 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
 
 - [ ] Dropbox (start sync early — it takes a while)
 - [ ] Slack, Notion, Notion Calendar, Todoist, Beeper, Spotify, Zoom
+- [ ] **Raycast** — sign in, then point it at the chezmoi-managed script commands:
+      Settings → Extensions → Script Commands → Add Directories →
+      `~/.config/raycast/scripts`. Nothing about Raycast is otherwise manageable —
+      its state is an encrypted SQLite database and there is no CLI, so installed
+      extensions, AI keys, and settings are all re-done by hand per machine (only
+      Pro syncs them). Extensions in use: 1Password, Brew, GitHub, Messages,
+      Notion, Spotify, Todoist, Zen.
 - [ ] **Notion Calendar** — sign in, then reconnect each calendar account by hand. It's an
       Electron app (`com.cron.electron`) with no preferences plist and no config file: its
       entire state is the Electron user-data directory, which is session and cache data.
