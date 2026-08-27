@@ -5,9 +5,6 @@ __tm_setup_homebrew
 
 eval "$(mise activate zsh)"
 
-# and add local python packages
-export PATH="$PATH:$HOME/Library/Python/3.9/bin"
-
 # only wait 10ms for additional characters in a sequence.
 export KEYTIMEOUT=1
 
