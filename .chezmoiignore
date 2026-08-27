@@ -7,7 +7,7 @@ CLAUDE.md
 
 # Root-level non-`dot_` files are applied to ~ by default, so anything meant to stay
 # repo-only needs listing here. The Brewfile is read from the source dir by
-# run_onchange_before_10-install-homebrew.sh (`--file="{{ .chezmoi.sourceDir }}/Brewfile"`),
+# .chezmoiscripts/before/run_onchange_before_10-install-homebrew.sh (`--file="{{ .chezmoi.sourceDir }}/Brewfile"`),
 # so a copy in ~ is never read -- it only goes stale and misleads a bare `brew bundle`.
 MANUAL-SETUP.md
 Brewfile
