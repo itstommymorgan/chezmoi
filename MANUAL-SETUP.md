@@ -74,6 +74,10 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
 
 - [ ] Dropbox (start sync early — it takes a while)
 - [ ] Slack, Notion, Notion Calendar, Todoist, Beeper, Spotify, Zoom
+- [ ] **Notion Calendar** — sign in, then reconnect each calendar account by hand. It's an
+      Electron app (`com.cron.electron`) with no preferences plist and no config file: its
+      entire state is the Electron user-data directory, which is session and cache data.
+      Nothing here is chezmoi-manageable.
 - [ ] Obsidian — open the vault from Dropbox once it has synced
 - [ ] **Wispr Flow** — launch and configure; it ships no config until first run, and none of it
       is dotfile-manageable.
