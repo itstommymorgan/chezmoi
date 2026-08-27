@@ -82,12 +82,30 @@ saves me from killing the whole application unless I really intend to.
 reversing both when it ends. It also tracks whether a Zoom call is in progress so
 `hyper g v` can jump to it.
 
-Two signals, OR'd:
+Three signals, OR'd:
 
 - **Camera in use.** App-agnostic, so it covers Google Meet in Zen, Discord, Slack
   huddles and FaceTime with no per-browser tab scraping. This is what replaced the
   old Chrome/JXA hunt for a `meet.google.com` tab.
 - **A Zoom meeting window**, because a camera-off Zoom call never touches the camera.
+- **An audio call** in `Phone.app` (the macOS 26 iPhone bridge) or `FaceTime.app`.
+
+Audio calls needed their own signal because they touch no camera and open no window
+— during a call neither app shows one or changes its title, so there is nothing for
+a windowfilter to match. What does change is that **`Video > Mute` is only enabled
+while a call exists**. Measured on a real bridge call: Phone launched with Mute
+already enabled while still ringing, the mic followed two seconds later, Mute went
+false as the call ended and the app quit a second after that.
+
+That check is deliberately mic-independent. The mic would catch every audio call,
+but Wispr Flow holds it for dictation — and since dictating into Slack is normal and
+Slack is always open, "mic plus a call app is running" would false-positive
+constantly. The menu state has no such problem, and it goes true *before* the mic.
+
+Sampling is needed because Mute flips inside the app's lifetime rather than at
+launch or quit, and no notification exists for a menu item changing state. The poll
+only runs while one of those apps is up, which outside a call is never — they launch
+for the call and quit when it ends.
 
 **OBS inverts the camera signal.** OBS grabs a real camera the moment it launches,
 long before any call, so while it's running "a real camera is in use" means nothing.

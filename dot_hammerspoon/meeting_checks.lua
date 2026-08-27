@@ -1,8 +1,7 @@
--- Detect whether I'm in a video call and drive the side effects: pause music, turn
--- Do Not Disturb on, and (once the Home Assistant hook below is wired back up) the
--- on-air light and desk lamp.
+-- Detect whether I'm on a call -- video or audio -- and drive the side effects:
+-- pause music, turn Do Not Disturb on, and light the on-air lamp via hass.lua.
 --
--- Two independent signals, OR'd together:
+-- Three independent signals, OR'd together:
 --
 --   camera  -- any real camera reporting in-use. App-agnostic, so it covers Google
 --             Meet in Zen, Discord, Slack huddles and FaceTime without any
@@ -10,9 +9,14 @@
 --             hunt for a meet.google.com tab.
 --   zoom    -- a Zoom meeting window. Kept because a camera-off Zoom call never
 --             touches the camera and would otherwise go undetected.
+--   call    -- an audio call in Phone.app (the macOS 26 iPhone bridge) or
+--             FaceTime.app. Neither shows a window or changes its title during a
+--             call, but "Video > Mute" is only enabled while one is in progress.
 --
 -- The mic would catch every camera-off call, but Wispr Flow grabs it for dictation,
--- so it is a false-positive generator here and is deliberately not used.
+-- so it is a false-positive generator here and is deliberately not used. The menu
+-- check above is why it is not needed: it is mic-independent, and it goes true
+-- while the call is still ringing, a couple of seconds before the mic opens.
 
 ext.utils.meetings = {}
 ext.utils.meetings.in_zoom_meeting = false
@@ -30,7 +34,7 @@ ext.utils.meetings.in_zoom_meeting = false
 -- call in that state would be missed.
 local VIRTUAL_CAMERA_PATTERNS = { "virtual", "obs" }
 
-local signals = { camera = false, zoom = false }
+local signals = { camera = false, zoom = false, call = false }
 local active = false
 
 -- Drives the on-air light. See hass.lua: no-ops off the home network, and never
@@ -53,21 +57,22 @@ function ext.utils.meetings.out_of_meeting()
   ext.focus.off()
 end
 
--- Only fire on a transition. Either signal alone is enough to be in a call, and both
--- have to clear before it is over.
+-- Only fire on a transition. Any one signal is enough to be on a call, and all of
+-- them have to clear before it is over.
 local function recompute(reason)
-  local nowActive = signals.camera or signals.zoom
+  local nowActive = signals.camera or signals.zoom or signals.call
   if nowActive == active then
     return
   end
 
   active = nowActive
   ext.log:i(
-    ("meeting %s (%s; camera=%s zoom=%s)"):format(
+    ("meeting %s (%s; camera=%s zoom=%s call=%s)"):format(
       active and "started" or "ended",
       reason,
       tostring(signals.camera),
-      tostring(signals.zoom)
+      tostring(signals.zoom),
+      tostring(signals.call)
     )
   )
 
@@ -103,6 +108,70 @@ local function anyCameraInUse()
     return not obsRunning and camera:isInUse()
   end)
 end
+
+-- Phone.app is the macOS 26 iPhone bridge; FaceTime handles its own calls. Neither
+-- opens a window or changes its title for a call, so there is nothing for a
+-- windowfilter to match -- but "Video > Mute" is disabled until a call exists.
+--
+-- Measured on a real bridge call: Phone launched with Mute already enabled while
+-- still ringing, the mic followed two seconds later, Mute went false as the call
+-- ended and the app quit a second after that.
+local CALL_APPS = { "Phone", "FaceTime" }
+
+local function anyCallInProgress()
+  return hs.fnutils.some(CALL_APPS, function(name)
+    local app = hs.application.get(name)
+    if not app then
+      return false
+    end
+    local mute = app:findMenuItem({ "Video", "Mute" })
+    return mute ~= nil and mute.enabled
+  end)
+end
+
+local function anyCallAppRunning()
+  return hs.fnutils.some(CALL_APPS, function(name)
+    return hs.application.get(name) ~= nil
+  end)
+end
+
+-- Mute flips within the app's lifetime rather than at launch or quit, and there is
+-- no notification for a menu item changing state, so it has to be sampled. Only
+-- while one of these apps is up, which outside a call is never -- they launch for
+-- the call and quit when it ends.
+local callPoll = hs.timer.new(2, function()
+  local now = anyCallInProgress()
+  if now ~= signals.call then
+    signals.call = now
+    recompute("call")
+  end
+end)
+
+local function syncCallPolling()
+  if anyCallAppRunning() then
+    if not callPoll:running() then
+      callPoll:start()
+    end
+  else
+    callPoll:stop()
+    if signals.call then
+      signals.call = false
+      recompute("call app quit")
+    end
+  end
+end
+
+ext.watchers.call_apps = hs.application.watcher
+  .new(function(name, event)
+    if hs.fnutils.contains(CALL_APPS, name) then
+      if event == hs.application.watcher.launched or event == hs.application.watcher.terminated then
+        syncCallPolling()
+      end
+    end
+  end)
+  :start()
+
+syncCallPolling()
 
 -- Cameras have to be retained or their property watchers are collected and silently
 -- stop firing, the same way an unretained hs.screen.watcher does.
