@@ -48,9 +48,6 @@ hs.loadSpoon("Shade")
 -- my custom function for launching/focusing a specific app
 require("launch_or_focus")
 
--- my custom functions for manipulating chrome tabs
-require("chrome_tab_automation")
-
 -- window grid
 local my_grid = require("my_grid")
 

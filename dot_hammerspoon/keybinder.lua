@@ -14,69 +14,43 @@ function ext.utils.toggle_function(appName)
   end
 end
 
-function ext.utils.browser_function(url)
-  exact = "true"
-  wildcard = "*"
-  if url:sub(-1) == wildcard then
-    url = url:sub(1, -2)
-    exact = "false"
+-- Resolve one entry to the function RecursiveBinder should call. Returns nil for an
+-- entry that declares no action, which the callers report rather than bind.
+local function entry_function(entry)
+  if entry.app ~= nil then
+    return ext.utils.app_function(entry.app)
+  elseif entry.toggle ~= nil then
+    return ext.utils.toggle_function(entry.toggle)
+  elseif entry.fun ~= nil then
+    return entry.fun
+  elseif entry.map ~= nil then
+    return ext.utils.build_map(entry.map)
   end
-
-  return ext.app.forceLaunchOrOpenUrl(url, exact)
+  return nil
 end
 
 function ext.utils.build_map(map)
   local binding = {}
   hs.fnutils.each(map, function(entry)
-    local key = entry.key
-    local value = nil
-    if entry.app ~= nil then
-      value = ext.utils.app_function(entry.app)
-    elseif entry.toggle ~= nil then
-      value = ext.utils.toggle_function(entry.toggle)
-    elseif entry.url ~= nil then
-      value = ext.utils.browser_function(entry.url)
-    elseif entry.fun ~= nil then
-      value = entry.fun
-    elseif entry.map ~= nil then
-      value = ext.utils.build_map(entry.map)
-    end
-
-    binding[singleKey(key, entry.comment)] = value
+    binding[singleKey(entry.key, entry.comment)] = entry_function(entry)
   end)
-
-  ext.tmp_binding = binding
   return binding
 end
 
-function ext.utils.jump_to_meeting()
-  if ext.utils.meetings.in_zoom_meeting then
-    ext.app.forceLaunchOrFocus("zoom.us")()
-    ext.log:i("video call shortcut called but no call in progress.")
-  end
-end
-
 -- given a map of keybindings, bind all of them to <hyper>-key
--- supports switching to apps, switching to urls, and also custom functions and
--- recursive bindings.
+-- supports switching to apps and also custom functions and recursive bindings.
 function ext.utils.keybinder(keybindings)
   ext.utils.keybindings = keybindings
   hs.fnutils.each(keybindings, function(keybinding)
-    binding_fun = nil
-    if keybinding.app ~= nil then
-      binding_fun = ext.utils.app_function(keybinding.app)
-    elseif keybinding.toggle ~= nil then
-      binding_fun = ext.utils.toggle_function(keybinding.toggle)
-    elseif keybinding.url ~= nil then
-      binding_fun = ext.utils.browser_function(keybinding.url)
-    elseif keybinding.fun ~= nil then
-      binding_fun = keybinding.fun
-    elseif keybinding.map ~= nil then
+    local binding_fun
+    if keybinding.map ~= nil then
       binding_fun = spoon.RecursiveBinder.recursiveBind(ext.utils.build_map(keybinding.map))
+    else
+      binding_fun = entry_function(keybinding)
     end
 
     if binding_fun == nil then
-      ext.log:i("No valid binding found for key ✧" .. keybinding.key .. ".")
+      ext.log:w("no valid binding found for key " .. keybinding.key)
     else
       hs.hotkey.bind(ext.hyper, keybinding.key, keybinding.comment, binding_fun)
     end
