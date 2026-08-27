@@ -1,6 +1,12 @@
 # Loaded after compinit -- op and the oh-my-zsh git plugin call compdef at source
 # time, which does not exist until compinit has run.
 
+# zsh-vi-mode defines ~46 widgets and must come first. Anything that wraps
+# widgets (autosuggestions, autopair, syntax-highlighting) has to wrap ZVM's
+# final versions; if ZVM loads later it redefines already-wrapped widgets and
+# the wrapper ends up calling itself -- "maximum nested function level reached".
+jeffreytse/zsh-vi-mode
+
 greymd/docker-zsh-completion
 dracula/zsh path:dracula.zsh-theme
 joshskidmore/zsh-fzf-history-search
@@ -8,7 +14,6 @@ ohmyzsh/ohmyzsh path:plugins/git
 paulirish/git-open
 sirhc/op.plugin.zsh
 MichaelAquilina/zsh-you-should-use
-jeffreytse/zsh-vi-mode
 zsh-users/zsh-autosuggestions
 
 # Both bind widgets over everything above, so they stay last.

@@ -21,8 +21,23 @@ everything else, which must load *after* it, because `op` and the oh-my-zsh git 
 `compdef` at source time and that function does not exist until `compinit` has run. Collapsing
 the two lists into one breaks the shell with `command not found: compdef`.
 
-Ordering inside `zsh_plugins.txt` is significant at the end: autopair and syntax-highlighting
-bind widgets over everything above them and stay last.
+Ordering inside `zsh_plugins.txt` is significant at **both** ends, and both were found the
+hard way:
+
+- `zsh-vi-mode` must be **first**. It defines ~46 widgets, and anything that wraps widgets
+  (autosuggestions, autopair, syntax-highlighting) has to wrap ZVM's final versions. Put ZVM
+  after them and it redefines already-wrapped widgets, so the wrapper calls itself:
+  `_zsh_autosuggest_widget_modify: maximum nested function level reached`, spraying FUNCNEST
+  errors over every prompt. zplug did not source in list order, which is why the same
+  ordering was survivable there and is not here.
+- autopair and syntax-highlighting bind widgets over everything above them and stay **last**.
+
+One consequence of ZVM being first: `ZVM_INIT_MODE=sourcing` makes `zvm_init` — and with it
+`zvm_after_init_commands` — run before the rest of the list is sourced, so the `Ctrl+R`
+binding in `custom/fzf.zsh` is a forward reference to a widget that does not exist yet. zsh
+resolves widget names at keypress rather than bind time, so this works, but it means
+`bindkey -M viins '^R'` reporting the right name is not on its own proof: check
+`zle -la | grep fzf_history_search` finds the widget too.
 
 ## Keybindings and zsh-vi-mode
 
