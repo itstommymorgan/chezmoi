@@ -6,6 +6,8 @@ ext = {
   utils = {},
   cache = {},
   log = hs.logger.new("myconfig", "info"),
+  -- Karabiner maps right_command to this combo when held, and to hyper+space
+  -- (the MicMute binding below) when tapped alone.
   hyper = { "cmd", "alt", "ctrl", "shift" },
   watchers = {},
 }
@@ -38,9 +40,6 @@ require("amphetamine")
 
 -- force *hold* of Cmd-Q to close apps
 require("slowq")
-
--- Use Control as ESC if pressed in isolation
-hs.loadSpoon("ControlEscape"):start()
 
 -- Use a "Shade" to toggle screen brightness
 hs.loadSpoon("Shade")

@@ -32,9 +32,9 @@
                         ]
                     },
                     {
+                        "description": "Change right_command to command+control+option+shift (the hyper key every Hammerspoon binding hangs off) if pressed with other keys, hyper+space if pressed alone -- which is MicMute.spoon's toggle in dot_hammerspoon/init.lua.",
                         "manipulators": [
                             {
-                                "description": "Change right_command to command+control+option+shift if pressed with other keys, toggle mic mute if pressed alone.",
                                 "from": {
                                     "key_code": "right_command",
                                     "modifiers": { "optional": ["any"] }
