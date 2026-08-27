@@ -2,6 +2,7 @@
 tap "OJFord/formulae"
 
 # --- CLI tools ---
+brew "antidote" # zsh plugin manager; see dot_zsh/plugins.zsh
 brew "bat"
 brew "curl"
 brew "diff-so-fancy"
@@ -20,7 +21,6 @@ brew "shellcheck"
 brew "terminal-notifier"
 brew "tree-sitter-cli"
 brew "zoxide"
-brew "zplug"
 brew "zsh"
 
 # --- GUI apps ---

@@ -1,0 +1,3 @@
+# Completion-only plugins. Split out from zsh_plugins.txt because these have to
+# reach fpath before compinit runs, and most of that list has to load after it.
+zsh-users/zsh-completions kind:fpath path:src

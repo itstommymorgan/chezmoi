@@ -1,0 +1,15 @@
+#!/usr/bin/env zsh
+
+# Pulls plugin repos and regenerates the static load files, so the first
+# interactive shell on a new machine isn't waiting on a dozen git clones.
+# --bundles skips the self-update, which the Homebrew build disables anyway.
+
+export ZSH="$HOME/.zsh"
+fpath+=("$(brew --prefix)/opt/antidote/share/antidote/functions")
+autoload -Uz antidote
+
+antidote update --bundles || true # no-op before anything has been cloned
+
+for txt in "$ZSH"/zsh_plugins{_fpath,}.txt; do
+  antidote bundle <"$txt" >| "${txt%.txt}.zsh"
+done

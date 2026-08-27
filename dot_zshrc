@@ -5,8 +5,6 @@ __tm_setup_homebrew
 
 eval "$(mise activate zsh)"
 
-source $BREW_ROOT/opt/zplug/init.zsh
-
 # and add local python packages
 export PATH="$PATH:$HOME/Library/Python/3.9/bin"
 
@@ -23,4 +21,4 @@ for file in ~/.zsh/custom/*.zsh; do
 done
 
 # load plugins
-source $ZSH/plug.zsh
+source $ZSH/plugins.zsh

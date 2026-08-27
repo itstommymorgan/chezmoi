@@ -1,0 +1,16 @@
+# Loaded after compinit -- op and the oh-my-zsh git plugin call compdef at source
+# time, which does not exist until compinit has run.
+
+greymd/docker-zsh-completion
+dracula/zsh path:dracula.zsh-theme
+joshskidmore/zsh-fzf-history-search
+ohmyzsh/ohmyzsh path:plugins/git
+paulirish/git-open
+sirhc/op.plugin.zsh
+MichaelAquilina/zsh-you-should-use
+jeffreytse/zsh-vi-mode
+zsh-users/zsh-autosuggestions
+
+# Both bind widgets over everything above, so they stay last.
+hlissner/zsh-autopair
+zsh-users/zsh-syntax-highlighting
