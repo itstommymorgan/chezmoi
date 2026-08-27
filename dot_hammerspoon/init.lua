@@ -76,6 +76,22 @@ require("windowpaner")
 
 require("keybinder")
 
+local function moveToScreen(index)
+  return function()
+    local screen = hs.screen.allScreens()[index]
+    local win = hs.window.focusedWindow()
+    if screen and win then
+      win:moveToScreen(screen, false, true)
+    end
+  end
+end
+
+local function moveToGridPosition(position)
+  return function()
+    my_grid.moveWindowToPosition(my_grid.screenPositions[position])
+  end
+end
+
 ext.utils.keybinder({
   {
     key = "g",
@@ -156,61 +172,13 @@ ext.utils.keybinder({
     key = "w",
     comment = "Window...",
     map = {
-      {
-        key = "1",
-        comment = "Move to Screen 1",
-        fun = function()
-          local displays = hs.screen.allScreens()
-          local win = hs.window.focusedWindow()
-          win:moveToScreen(displays[1], false, true)
-        end,
-      },
-      {
-        key = "2",
-        comment = "Move to Screen 2",
-        fun = function()
-          local displays = hs.screen.allScreens()
-          local win = hs.window.focusedWindow()
-          win:moveToScreen(displays[2], false, true)
-        end,
-      },
-      {
-        key = "3",
-        comment = "Move to Screen 3",
-        fun = function()
-          local displays = hs.screen.allScreens()
-          local win = hs.window.focusedWindow()
-          win:moveToScreen(displays[3], false, true)
-        end,
-      },
-      {
-        key = "h",
-        comment = "Left",
-        fun = function()
-          my_grid.moveWindowToPosition(my_grid.screenPositions.left)
-        end,
-      },
-      {
-        key = "j",
-        comment = "Bottom",
-        fun = function()
-          my_grid.moveWindowToPosition(my_grid.screenPositions.bottom)
-        end,
-      },
-      {
-        key = "k",
-        comment = "Top",
-        fun = function()
-          my_grid.moveWindowToPosition(my_grid.screenPositions.top)
-        end,
-      },
-      {
-        key = "l",
-        comment = "Right",
-        fun = function()
-          my_grid.moveWindowToPosition(my_grid.screenPositions.right)
-        end,
-      },
+      { key = "1", comment = "Move to Screen 1", fun = moveToScreen(1) },
+      { key = "2", comment = "Move to Screen 2", fun = moveToScreen(2) },
+      { key = "3", comment = "Move to Screen 3", fun = moveToScreen(3) },
+      { key = "h", comment = "Left", fun = moveToGridPosition("left") },
+      { key = "j", comment = "Bottom", fun = moveToGridPosition("bottom") },
+      { key = "k", comment = "Top", fun = moveToGridPosition("top") },
+      { key = "l", comment = "Right", fun = moveToGridPosition("right") },
     },
   },
 })
