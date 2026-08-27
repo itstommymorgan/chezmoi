@@ -49,6 +49,22 @@ Todoist grabs the binding by default.
       already frees this from Spotlight.)
 - [ ] **AltTab** → **`Cmd+Tab`**.
 
+## 4a. Shortcuts for Do Not Disturb
+
+Hammerspoon's `focus.lua` drives Do Not Disturb through the Shortcuts app, because macOS 26
+exposes no other supported route: `~/Library/DoNotDisturb/DB` is TCC-protected, `dndmoded`
+caches over direct writes to it, and clicking Control Center through the accessibility tree
+breaks on most releases. The `shortcuts` CLI can run and sign shortcuts but not create them,
+so these three are hand-built once. Each is a single **Set Focus** action.
+
+- [ ] **`Do Not Disturb On`** — Set Focus → Do Not Disturb → Turn On.
+- [ ] **`Do Not Disturb Off`** — Set Focus → Do Not Disturb → Turn Off.
+- [ ] **`Toggle Do Not Disturb`** — Set Focus → Do Not Disturb → Toggle.
+
+The names must match exactly; `focus.lua` checks them against `hs.shortcuts.list()` at load
+and logs any that are missing rather than failing silently. On/off are separate from toggle
+on purpose — the meeting watcher needs to assert a state, not flip whatever is current.
+
 ## 5. Terminal
 
 - [ ] Launch **Ghostty** once and make it the default terminal.

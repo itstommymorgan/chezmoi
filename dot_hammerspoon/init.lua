@@ -47,6 +47,9 @@ hs.loadSpoon("Shade")
 -- my custom function for launching/focusing a specific app
 require("launch_or_focus")
 
+-- Do Not Disturb, via the Shortcuts in MANUAL-SETUP.md
+require("focus")
+
 -- window grid
 local my_grid = require("my_grid")
 
@@ -125,13 +128,7 @@ ext.utils.keybinder({
           caffeineClicked()
         end,
       },
-      {
-        key = "d",
-        comment = "Do Not Disturb",
-        fun = function()
-          hs.eventtap.keyStroke({ "option", "shift" }, "d")
-        end,
-      },
+      { key = "d", comment = "Do Not Disturb", fun = ext.focus.toggle },
       {
         key = "n",
         comment = "close Notifications",
