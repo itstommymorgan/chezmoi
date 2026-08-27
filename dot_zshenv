@@ -7,12 +7,28 @@ export ZSH="$HOME/.zsh"
 # it in .zshenv in order to make sure we have the right path order in place (otherwise
 # scripts start to fail).
 __tm_setup_homebrew() {
+  # path_helper (which brew shellenv used to call) deduplicated PATH as a side
+  # effect; -U keeps that property for free and applies to every later change.
+  typeset -gU path PATH fpath FPATH
+
   export BREW_ROOT="/usr/local"
-  if [[ `uname -m` == 'arm64' ]]; then
+  # $CPUTYPE is a zsh builtin; `uname -m` would fork.
+  if [[ $CPUTYPE == 'arm64' ]]; then
     export BREW_ROOT="/opt/homebrew"
   fi
 
-  eval $(${BREW_ROOT}/bin/brew shellenv)
+  # Inlined `brew shellenv`. That call forks twice (it shells out to path_helper)
+  # to print a string that only depends on BREW_ROOT, and this runs for every zsh
+  # invocation including non-interactive ones. Verified to produce a byte-identical
+  # PATH; re-check against `brew shellenv` output after a major Homebrew bump.
+  export HOMEBREW_PREFIX="$BREW_ROOT"
+  export HOMEBREW_CELLAR="$BREW_ROOT/Cellar"
+  export HOMEBREW_REPOSITORY="$BREW_ROOT"
+  export PATH="$BREW_ROOT/bin:$BREW_ROOT/sbin${PATH+:$PATH}"
+  [[ -z "${MANPATH-}" ]] || export MANPATH=":${MANPATH#:}"
+  export INFOPATH="$BREW_ROOT/share/info:${INFOPATH:-}"
+  fpath[1,0]="$BREW_ROOT/share/zsh/site-functions"
+  export FPATH
 }
 
 if [[ ! -o interactive ]]; then
