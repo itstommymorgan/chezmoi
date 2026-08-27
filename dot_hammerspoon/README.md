@@ -251,7 +251,7 @@ All prefixed with the hyper key (a held `right_command`).
 | `space` | Toggle microphone mute |
 | `m` | Center the mouse on the active window |
 | `g b` / `g t` | Zen / Ghostty |
-| `g d` / `g m` / `g o` / `g s` / `g u` | Todoist / Mimestream / Obsidian / Slack / Spotify |
+| `g c` / `g d` / `g m` / `g o` / `g s` / `g u` | Notion Calendar / Todoist / Mimestream / Obsidian / Slack / Spotify |
 | `g i b` / `g i m` | Beeper / Messages |
 | `g v` | Jump to the in-progress video call |
 | `h c` / `h e` | Hammerspoon console / edit `init.lua` |

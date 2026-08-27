@@ -138,6 +138,7 @@ ext.utils.keybinder({
     comment = "Go...",
     map = {
       { key = "b", comment = "Browser", app = "Zen" },
+      { key = "c", comment = "Calendar", app = "Notion Calendar" },
       { key = "d", comment = "ToDoist", app = "Todoist" },
       {
         key = "i",
