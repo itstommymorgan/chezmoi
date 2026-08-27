@@ -7,6 +7,7 @@ brew "curl"
 brew "diff-so-fancy"
 brew "eza"
 brew "fd"
+brew "fzf" # dot_zsh: zsh-fzf-history-search (Ctrl+R) and FZF_DEFAULT_COMMAND
 brew "gh"
 brew "git"
 brew "imagemagick" # snacks.image: converts non-PNG formats for inline rendering
