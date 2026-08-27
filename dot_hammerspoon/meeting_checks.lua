@@ -33,10 +33,11 @@ local VIRTUAL_CAMERA_PATTERNS = { "virtual", "obs" }
 local signals = { camera = false, zoom = false }
 local active = false
 
--- Placeholder. The old implementation shelled out to mosquitto_pub against
--- mosquitto.morgan.house; replace with an HTTP call to Home Assistant.
+-- Drives the on-air light. See hass.lua: no-ops off the home network, and never
+-- raises -- the meeting side effects below must not depend on a light responding.
 function ext.utils.meetings.notify(state)
   ext.log:i("meeting state: " .. state)
+  ext.hass.notify(state)
 end
 
 function ext.utils.meetings.in_meeting()

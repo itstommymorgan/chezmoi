@@ -1,0 +1,16 @@
+-- Rendered by chezmoi into ~/.hammerspoon/hass_config.lua at 0600. The `private_`
+-- prefix sets those permissions and is stripped from the target name, so hass.lua
+-- requires this as "hass_config".
+--
+-- The host is a LAN address and means nothing off this network, so it stays
+-- readable here. The webhook IDs are capability credentials -- anyone holding one
+-- can fire the automation -- so they come from 1Password and never enter the repo.
+
+return {
+  host = "192.168.1.136",
+  port = 8123,
+  webhooks = {
+    ON = "{{ onepasswordRead "op://Private/Home Assistant/on-air on" }}",
+    OFF = "{{ onepasswordRead "op://Private/Home Assistant/on-air off" }}",
+  },
+}

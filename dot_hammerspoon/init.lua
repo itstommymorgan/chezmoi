@@ -53,6 +53,9 @@ require("focus")
 -- dismiss notifications through the accessibility tree
 require("notifications")
 
+-- Home Assistant webhooks for the meeting watcher
+require("hass")
+
 -- window grid
 local my_grid = require("my_grid")
 
