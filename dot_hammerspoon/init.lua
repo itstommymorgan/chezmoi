@@ -54,12 +54,17 @@ if ext.config.meeting_checks then
   require("meeting_checks")
 end
 
+-- screen is a name pattern (see windowpaner.lua); an integer index still works but
+-- shifts around when displays are rearranged.
+local LAPTOP = "built%-in"
+local DESK = "dell"
+
 ext.utils.windowpaner_config = {
-  { app = "Mimestream", screen = 2, fullScreen = true },
-  { app = "Obsidian", screen = 1, fullScreen = false },
-  { app = "Slack", screen = 2, fullScreen = true },
-  { app = "Spotify", screen = 2, fullScreen = true },
-  { app = "Todoist", screen = 3, fullScreen = true },
+  { app = "Mimestream", screen = LAPTOP, fullScreen = true },
+  { app = "Obsidian", screen = DESK, fullScreen = false },
+  { app = "Slack", screen = LAPTOP, fullScreen = true },
+  { app = "Spotify", screen = LAPTOP, fullScreen = true },
+  { app = "Todoist", screen = LAPTOP, fullScreen = true },
 }
 require("windowpaner")
 
