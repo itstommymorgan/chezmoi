@@ -1,5 +1,3 @@
--- Set up the logger
-
 -- extensions, available in hammerspoon console
 ext = {
   frame = {},
@@ -12,11 +10,22 @@ ext = {
   watchers = {},
 }
 
-if hs.fs.attributes("~/.config/hammerspoon.json") == nil then
-  hs.execute("cp ~/.hammerspoon/hammerspoon.json.defaults ~/.config/hammerspoon.json")
-end
+-- hs.settings is macOS defaults storage, so it needs no file to exist up front and
+-- no tilde expansion. Change these from the Hammerspoon console with
+-- hs.settings.set("meeting_checks", true), then reload.
+local defaults = {
+  meeting_checks = false,
+  always_center_mouse = false,
+}
 
-ext.config = hs.json.read("~/.config/hammerspoon.json")
+ext.config = {}
+for key, fallback in pairs(defaults) do
+  local stored = hs.settings.get(key)
+  if stored == nil then
+    stored = fallback
+  end
+  ext.config[key] = stored
+end
 
 -- Reload config automatically
 hs.loadSpoon("ReloadConfiguration"):start()
