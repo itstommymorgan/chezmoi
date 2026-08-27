@@ -3,9 +3,10 @@ local toggledApp = nil
 
 function ext.app.centerMouseOnActiveWindow()
   local win = hs.window.focusedWindow()
-  local rect = win:frame()
-  local center = hs.geometry.rectMidPoint(rect)
-  hs.mouse.setAbsolutePosition(center)
+  if not win then
+    return
+  end
+  hs.mouse.absolutePosition(win:frame().center)
 end
 
 -- Given an appName, try to bring focus to it if it's running - if it's not
@@ -26,9 +27,11 @@ function ext.app.forceLaunchOrFocus(appName)
       return win:isStandard()
     end)
 
-    -- break if this app is not frontmost (when/why?)
-    if frontmostApp:title() ~= appName then
-      print("Expected app in front: " .. appName .. " got: " .. frontmostApp:title())
+    -- launchOrFocus is fire-and-forget, so the app may still be starting, or the
+    -- user may have moved on. Either way the window recovery below would act on the
+    -- wrong app. Case-insensitive because bindings name apps informally.
+    if frontmostApp:title():lower() ~= appName:lower() then
+      ext.log:i("expected " .. appName .. " in front, got " .. frontmostApp:title())
       return
     end
 
