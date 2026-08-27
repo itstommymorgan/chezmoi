@@ -13,3 +13,6 @@ binding. `zsh-fzf-history-search` did exactly this to `Ctrl+R`. Bindings that mu
 through ZVM's post-init hook, appended as strings so they compose:
 `zvm_after_init_commands+=('bindkey -M viins "^R" fzf_history_search')` (see `custom/fzf.zsh`).
 Check a binding actually took with `bindkey -M viins '^R'`, not plain `bindkey`.
+
+History options live in `custom/history.zsh` and exist mainly to override macOS `/etc/zshrc`,
+which sets `SAVEHIST=1000` and truncates without warning.
