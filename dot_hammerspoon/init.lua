@@ -82,8 +82,13 @@ require("notifications")
 -- Home Assistant webhooks for the meeting watcher
 require("hass")
 
--- window grid
-local my_grid = require("my_grid")
+-- Window halves, thirds, corners, center and undo. Replaces the old my_grid.lua,
+-- which only did halves and quarters and had no undo.
+hs.loadSpoon("WindowHalfsAndThirds")
+
+-- my_grid used to set this globally as a side effect of being required. Window
+-- moves -- including windowpaner's -- animate without it.
+hs.window.animationDuration = 0
 
 if ext.config.meeting_checks then
   require("meeting_checks")
@@ -115,9 +120,12 @@ local function moveToScreen(index)
   end
 end
 
-local function moveToGridPosition(position)
+-- Dot-called, not colon: these are hs.fnutils.partial bindings over
+-- resizeCurrentWindow(how, use_frame_correctness), and undo/center/toggleMaximized
+-- take a window. A colon call would pass the spoon table into that first argument.
+local function windowAction(method)
   return function()
-    my_grid.moveWindowToPosition(my_grid.screenPositions[position])
+    spoon.WindowHalfsAndThirds[method]()
   end
 end
 
@@ -204,10 +212,23 @@ ext.utils.keybinder({
       { key = "1", comment = "Move to Screen 1", fun = moveToScreen(1) },
       { key = "2", comment = "Move to Screen 2", fun = moveToScreen(2) },
       { key = "3", comment = "Move to Screen 3", fun = moveToScreen(3) },
-      { key = "h", comment = "Left", fun = moveToGridPosition("left") },
-      { key = "j", comment = "Bottom", fun = moveToGridPosition("bottom") },
-      { key = "k", comment = "Top", fun = moveToGridPosition("top") },
-      { key = "l", comment = "Right", fun = moveToGridPosition("right") },
+      { key = "h", comment = "Left half", fun = windowAction("leftHalf") },
+      { key = "j", comment = "Bottom half", fun = windowAction("bottomHalf") },
+      { key = "k", comment = "Top half", fun = windowAction("topHalf") },
+      { key = "l", comment = "Right half", fun = windowAction("rightHalf") },
+      {
+        key = "t",
+        comment = "Thirds...",
+        map = {
+          { key = "h", comment = "Left third", fun = windowAction("leftThird") },
+          { key = "j", comment = "Bottom third", fun = windowAction("bottomThird") },
+          { key = "k", comment = "Top third", fun = windowAction("topThird") },
+          { key = "l", comment = "Right third", fun = windowAction("rightThird") },
+        },
+      },
+      { key = "c", comment = "Center", fun = windowAction("center") },
+      { key = "f", comment = "Full screen", fun = windowAction("toggleMaximized") },
+      { key = "u", comment = "Undo", fun = windowAction("undo") },
     },
   },
 })
