@@ -84,13 +84,7 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
 
 - [ ] Dropbox (start sync early — it takes a while)
 - [ ] Slack, Notion, Notion Calendar, Todoist, Beeper, Spotify, Zoom
-- [ ] **Raycast** — sign in, then point it at the chezmoi-managed script commands:
-      Settings → Extensions → Script Commands → Add Directories →
-      `~/.config/raycast/scripts`. Nothing about Raycast is otherwise manageable —
-      its state is an encrypted SQLite database and there is no CLI, so installed
-      extensions, AI keys, and settings are all re-done by hand per machine (only
-      Pro syncs them). Extensions in use: 1Password, Brew, GitHub, Messages,
-      Notion, Spotify, Todoist, Zen.
+- [ ] **Raycast** — see section 8; it needs more than a sign-in.
 - [ ] **Notion Calendar** — sign in, then reconnect each calendar account by hand. It's an
       Electron app (`com.cron.electron`) with no preferences plist and no config file: its
       entire state is the Electron user-data directory, which is session and cache data.
@@ -98,3 +92,56 @@ path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` a
 - [ ] Obsidian — open the vault from Dropbox once it has synced
 - [ ] **Wispr Flow** — launch and configure; it ships no config until first run, and none of it
       is dotfile-manageable.
+
+## 8. Raycast
+
+None of this is chezmoi-manageable: Raycast's state is an encrypted SQLite database with
+no CLI, so extensions, AI keys, and settings are re-done by hand on every machine (Pro's
+Cloud Sync is the only thing that carries them). The Profile text below is the part worth
+copying carefully — it is the whole reason answers come back terse instead of padded.
+
+- [ ] Sign in. **Verify the version is 2.x** — the AI Profile lives in v2 only, and the
+      Homebrew cask tracks it (`brew upgrade --cask raycast`).
+- [ ] Point it at the chezmoi-managed script commands: Settings → Extensions →
+      Script Commands → Add Directories → `~/.config/raycast/scripts`.
+- [ ] Install extensions: 1Password, Brew, GitHub, Messages, Notion, Spotify, Todoist, Zen.
+- [ ] **Enable the AI extension explicitly.** Quick AI ships *disabled* in v2 — it won't
+      appear in root search or fire as a fallback until you toggle it on in the AI
+      extension's own settings, which looks exactly like AI being broken.
+- [ ] Set up AI access. Claude models need either the $8/mo Advanced AI add-on or BYOK;
+      BYOK is far cheaper at this usage (roughly 0.1–0.5¢ per question against a prepaid
+      Console balance). Paste an Anthropic API key at Settings → AI → API Keys.
+      **API credits are billed separately from a Claude subscription** — the subscription
+      does not fund them.
+- [ ] Set the AI Profile at Settings → AI → Personalization → Profile:
+
+      ```
+      Answer in at most 3 sentences of plain prose. No preamble, no headers, no bullet
+      lists, no restating the question, no caveats, no offers to elaborate. If the answer
+      is a single fact, give just that fact.
+
+      Be direct. Skip flattery and hedging — if something is a bad idea, say so plainly.
+      Don't describe what you're about to do; just answer.
+
+      I'm a senior software engineer on macOS (Apple Silicon) — zsh, Neovim, Ghostty,
+      Homebrew, mise, git, chezmoi-managed dotfiles. On software and systems questions,
+      assume expert fluency and skip the fundamentals. On anything else, treat me as a
+      curious generalist and keep the concrete specifics in.
+      ```
+
+      The scoping in the last block is deliberate. An unscoped "assume technical fluency
+      and skip the basics" gets applied to *every* domain: asked why bacteria develop
+      antibiotic resistance, it dropped the concrete mechanisms and returned abstractions.
+      Scoping it restored them.
+- [ ] Leave **Memory** off (same Personalization screen). It builds a running summary of
+      your conversations — useful in general, but it reintroduces exactly the accumulation
+      that made Claude's workspace chats feel cluttered. Profile is the deliberate,
+      hand-written half; keep that and skip the automatic one.
+- [ ] Optionally set Quick AI as a fallback command (Settings → General → Fallback
+      Commands) so non-matching input routes to AI, restoring the v1 muscle memory.
+      `Cmd+J` promotes a Quick AI answer into a full AI Chat with its history.
+
+**A major-version upgrade does not preserve the API key.** Going 1.x → 2.x dropped the
+BYOK key and left every AI surface silently inert. Re-paste it after any big upgrade
+before assuming something else broke.
+
