@@ -101,10 +101,32 @@ Zoom is still covered by its window filter; a browser call in that state is miss
 The mic would catch every camera-off call, but Wispr Flow grabs it for dictation, so
 it's a false-positive generator and is deliberately unused.
 
-Off by default (`hs.settings` key `meeting_checks`). The Home Assistant side — the
-on-air light in the hallway and the desk lamp — used to run over MQTT to
-`mosquitto.morgan.house` and is currently a stub in `ext.utils.meetings.notify`,
-pending a rewrite against Home Assistant's HTTP API.
+Controlled by the `hs.settings` key `meeting_checks`.
+
+### Home Assistant
+
+`hass.lua` fires the on-air light through two Home Assistant webhooks, one for on
+and one for off. Webhooks rather than the REST API because the automations already
+exist on the HASS side and a webhook needs no long-lived token. It replaces the old
+MQTT path to `mosquitto.morgan.house`.
+
+The webhook IDs are capability credentials — anyone holding one can fire the
+automation — so they live in 1Password and are rendered into
+`~/.hammerspoon/hass_config.lua` (mode 0600) at apply time by
+`private_hass_config.lua.tmpl`. Nothing secret enters the repo. The host is a LAN
+address, meaningless elsewhere, so it stays readable in the template.
+
+**It only fires at home.** The webhooks exist on one LAN, so `atHome()` requires a
+local interface on the same `/24` as the HASS host. That covers wired and wireless
+alike — `hs.wifi.currentNetwork()` would not, since it returns nil on ethernet and
+needs a Location Services grant on macOS 14+ even on wifi.
+
+Everything is best-effort: a missing config, a foreign network, a non-IPv4 host or
+an HTTP failure all log and return. A meeting never fails to start because a light
+did not. The first request after a reload has been seen failing with status -1 on a
+cold connection, so transport failures get one retry — losing that silently would
+leave the light off for an entire call. HTTP statuses are answers rather than
+delivery failures, so those are reported, not repeated.
 
 ### Do Not Disturb
 
