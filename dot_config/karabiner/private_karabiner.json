@@ -140,40 +140,40 @@
                         ]
                     },
                     {
-                        "description": "right_option + a/s/d/f = bracket layer ( [ ] { } ).",
+                        "description": "Return-held + a/s/d/f = bracket layer ( [ ] { } ). Rides the same right_option+right_control modifier the return_or_enter rule emits, so it must stay after that rule.",
                         "manipulators": [
                             {
-                                "description": "right_option+a = [",
+                                "description": "Return-held + a = [",
                                 "from": {
                                     "key_code": "a",
-                                    "modifiers": { "mandatory": ["right_option"] }
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
                                 },
                                 "to": [{ "key_code": "open_bracket" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "right_option+s = ]",
+                                "description": "Return-held + s = ]",
                                 "from": {
                                     "key_code": "s",
-                                    "modifiers": { "mandatory": ["right_option"] }
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
                                 },
                                 "to": [{ "key_code": "close_bracket" }],
                                 "type": "basic"
                             },
                             {
-                                "description": "right_option+d = {",
+                                "description": "Return-held + d = {",
                                 "from": {
                                     "key_code": "d",
-                                    "modifiers": { "mandatory": ["right_option"] }
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
                                 },
                                 "to": [{ "key_code": "open_bracket", "modifiers": ["left_shift"] }],
                                 "type": "basic"
                             },
                             {
-                                "description": "right_option+f = }",
+                                "description": "Return-held + f = }",
                                 "from": {
                                     "key_code": "f",
-                                    "modifiers": { "mandatory": ["right_option"] }
+                                    "modifiers": { "mandatory": ["right_option", "right_control"] }
                                 },
                                 "to": [{ "key_code": "close_bracket", "modifiers": ["left_shift"] }],
                                 "type": "basic"
