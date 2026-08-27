@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 # `op` only works while the 1Password desktop app is running, and dot_ssh/id_ed25519.pub.tmpl
 # calls onepasswordRead. Targets apply alphabetically, so a failure under .ssh/ aborts every
 # after_ script behind it -- that's how AltTab silently never made it into login items.
@@ -25,7 +25,7 @@ fi
 echo "1Password isn't running; launching it in the background so \`op\` can resolve secrets..."
 open -g -j -a "1Password" 2>/dev/null || true
 
-for _ in $(seq 1 15); do
+for _ in {1..15}; do
   sleep 1
   if pgrep -f "$app_process" >/dev/null 2>&1; then
     exit 0

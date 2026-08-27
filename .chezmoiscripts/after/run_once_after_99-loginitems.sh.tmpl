@@ -1,10 +1,17 @@
-#!/bin/bash
+#!/usr/bin/env zsh
 
 # 1Password first: `op` needs the desktop app running, and chezmoi reads secrets from it
 # during apply (see run_before_25-ensure-1password.sh).
 apps=(1Password Hammerspoon Notion Claude Raycast Karabiner-Elements Todoist AltTab)
 
+# run_once state is keyed by contents, so any edit here replays the script --
+# check the existing list rather than re-adding all of them.
+existing="$(loginitems -l 2>/dev/null)"
+
 for app in "${apps[@]}"; do
+  if [[ "$existing" == *"$app"* ]]; then
+    continue
+  fi
   echo "adding $app to login items..."
   loginitems -a "$app"
 done
