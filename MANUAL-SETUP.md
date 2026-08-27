@@ -104,8 +104,6 @@ copying carefully — it is the whole reason answers come back terse instead of 
 
 - [ ] Sign in. **Verify the version is 2.x** — the AI Profile lives in v2 only, and the
       Homebrew cask tracks it (`brew upgrade --cask raycast`).
-- [ ] Point it at the chezmoi-managed script commands: Settings → Extensions →
-      Script Commands → Add Directories → `~/.config/raycast/scripts`.
 - [ ] Install extensions: 1Password, Brew, GitHub, Messages, Notion, Spotify, Todoist, Zen.
 - [ ] **Enable the AI extension explicitly.** Quick AI ships *disabled* in v2 — it won't
       appear in root search or fire as a fallback until you toggle it on in the AI
