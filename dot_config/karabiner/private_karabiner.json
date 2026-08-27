@@ -4,6 +4,19 @@
             "complex_modifications": {
                 "rules": [
                     {
+                        "description": "right_control -> fn, so Wispr Flow's Fn hotkey works on the Keychron. The Keychron's own Fn is a firmware layer key that never reaches the host, so there is nothing there to bind. right_control doesn't exist on the MacBook's built-in keyboard, so this needs no device scoping. Must stay ahead of the return_or_enter rule below: that rule *emits* right_control for the arrow layer, and a later rule would swallow it.",
+                        "manipulators": [
+                            {
+                                "from": {
+                                    "key_code": "right_control",
+                                    "modifiers": { "optional": ["any"] }
+                                },
+                                "to": [{ "key_code": "fn" }],
+                                "type": "basic"
+                            }
+                        ]
+                    },
+                    {
                         "description": "Change caps_lock to left_control if pressed with other keys, change caps_lock to escape if pressed alone.",
                         "manipulators": [
                             {
