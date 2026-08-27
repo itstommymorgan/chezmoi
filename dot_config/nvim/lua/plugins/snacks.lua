@@ -169,6 +169,9 @@ return {
     indent = { enabled = true },
     words = { enabled = true },
     notifier = { enabled = true },
+    -- Ghostty speaks the kitty graphics protocol, so markdown images render
+    -- inline. Needs `magick` for anything but PNG (Brewfile), and `gs` for PDFs.
+    image = { enabled = true },
     gh = {},
     terminal = {
       win = {
