@@ -53,7 +53,24 @@ Todoist grabs the binding by default.
 
 - [ ] Launch **Ghostty** once and make it the default terminal.
 
-## 6. App sign-ins
+## 6. Browser (Zen)
+
+The cask installs Zen, but nothing about the profile is chezmoi-managed. Zen names its profile
+directory with a random prefix (`Profiles/<random>.Default (release)`), so there is no stable
+path to target, and renaming it afterwards breaks the profile — `pkcs11.txt` and
+`extensions.json` store the absolute path. Set it up by hand and leave the directory name alone.
+
+- [ ] Launch **Zen** once to create the profile.
+- [ ] Sign in to a **Mozilla account** (Settings → Sync). This carries bookmarks, history,
+      passwords, extensions, changed prefs, and Zen's own workspaces / Essentials / enabled mods
+      — most of what you'd otherwise hand-manage.
+- [ ] Set Zen as the default browser: System Settings → Desktop & Dock → Default web browser.
+- [ ] Install extensions (sync restores them if this machine has synced before).
+- [ ] Only if you want `userChrome.css`: `about:config` →
+      `toolkit.legacyUserProfileCustomizations.stylesheets` → `true`. Zen ignores the file
+      entirely without it.
+
+## 7. App sign-ins
 
 - [ ] Dropbox (start sync early — it takes a while)
 - [ ] Slack, Notion, Notion Calendar, Todoist, Beeper, Spotify, Zoom
