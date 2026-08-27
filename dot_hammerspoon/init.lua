@@ -29,6 +29,32 @@ for key, fallback in pairs(defaults) do
   ext.config[key] = stored
 end
 
+-- The `hs` command line tool talks to Hammerspoon over a Mach port that only
+-- exists while this module is loaded, so requiring it here is what makes
+-- `hs -c '...'` work from a shell.
+require("hs.ipc")
+
+-- The tool itself is a symlink into the app bundle rather than anything Homebrew
+-- installs, so it has to be created per machine. cliStatus makes this a no-op
+-- after the first run, which keeps a new Mac from needing a manual step.
+local brewPrefix = hs.fs.attributes("/opt/homebrew/bin") and "/opt/homebrew" or "/usr/local"
+if not hs.ipc.cliStatus(brewPrefix, true) then
+  if hs.ipc.cliInstall(brewPrefix, true) then
+    ext.log:i("installed the hs command line tool into " .. brewPrefix)
+  else
+    ext.log:w("could not install the hs command line tool into " .. brewPrefix .. "/bin")
+  end
+end
+
+-- Generates lua_ls annotations for the whole hs API and every installed Spoon, into
+-- Spoons/EmmyLua.spoon/annotations. Only rewrites them when the docs are newer.
+--
+-- Must load *before* ReloadConfiguration: that spoon pathwatches all of
+-- hs.configdir and calls hs.reload on any change whatsoever, so ~140 annotation
+-- files appearing underneath it would reload in a loop. Generation happens during
+-- init, so getting in first is what keeps that from firing.
+hs.loadSpoon("EmmyLua")
+
 -- Reload config automatically
 hs.loadSpoon("ReloadConfiguration"):start()
 
