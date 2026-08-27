@@ -6,6 +6,13 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is Tommy Morgan's personal [chezmoi](https://www.chezmoi.io/)-managed dotfiles repository for macOS. It is the *source* state that chezmoi renders into the actual home directory (`~`). There is no build, lint, or test suite — "correctness" here means valid shell/Lua syntax and files that render/apply cleanly with chezmoi.
 
+## Git workflow here
+
+This repo overrides the global "branch before committing" rule: it's single-user with no
+review step and nothing downstream depends on its history, so commit straight to `main`.
+Branch only for an experiment that might get discarded. Every other global git rule still
+holds — don't commit unless asked, don't push without asking, stage by filename.
+
 ## chezmoi mechanics (important before editing filenames)
 
 chezmoi uses filename prefixes/suffixes to encode behavior. Get these wrong and a file either won't apply where intended or won't be treated as a template:
