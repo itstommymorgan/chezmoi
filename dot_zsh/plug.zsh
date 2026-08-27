@@ -4,9 +4,6 @@ export ZVM_INIT_MODE=sourcing
 # Manage zplug with zplug
 zplug 'zplug/zplug', hook-build:'zplug --self-manage'
 
-# completion and some niceties for AWS CLI
-zplug "eastokes/aws-plugin-zsh"
-
 # Complete all the things
 zplug "zsh-users/zsh-completions"
 
@@ -27,12 +24,6 @@ zplug "paulirish/git-open"
 
 # Completions for 1password commandline
 zplug "sirhc/op.plugin.zsh"
-
-# Enable faster parsing for `rake` commands
-zplug "unixorn/rake-completion.zshplugin"
-
-# Wrapper for terraform
-zplug "jsporna/terraform-zsh-plugin"
 
 # Remind me if I forgot my aliases
 zplug "MichaelAquilina/zsh-you-should-use"
