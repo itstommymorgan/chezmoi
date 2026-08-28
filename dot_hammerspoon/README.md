@@ -273,7 +273,7 @@ All prefixed with the hyper key (a held `right_command`).
 | `m` | Center the mouse on the active window |
 | `s` | Screenshot: crosshair, drag, straight to the clipboard |
 | `g b` / `g t` | Zen / Ghostty |
-| `g c` / `g d` / `g m` / `g o` / `g s` / `g u` | Notion Calendar / Todoist / Mimestream / Obsidian / Slack / Spotify |
+| `g a` / `g c` / `g d` / `g m` / `g o` / `g s` / `g u` | Claude / Notion Calendar / Todoist / Mimestream / Obsidian / Slack / Spotify |
 | `g i b` / `g i m` | Beeper / Messages |
 | `g v` | Jump to the in-progress video call |
 | `h c` / `h e` | Hammerspoon console / edit `init.lua` |
