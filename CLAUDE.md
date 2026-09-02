@@ -25,8 +25,14 @@ chezmoi uses filename prefixes/suffixes to encode behavior. Get these wrong and 
 - Every script uses `#!/usr/bin/env zsh`, matching the daily-driver shell rather than the bash 3.2 macOS ships. Two zsh differences bit the existing scripts: `read -p` means "read from coprocess" (use `read -r "?prompt"`), and `$'\033[1m'`-style escapes and `set -euo pipefail` both work unchanged. `10-install-homebrew` still calls `/bin/bash -c` explicitly for Homebrew's own installer.
 - Ordering is ASCII by *target name* (prefixes and `.tmpl` stripped), but **only within the `before_` group and the `after_` group separately** — the attribute wins, so every `before_` script precedes every `after_` script regardless of numbers. The numeric prefixes (`00`, `10`, `20`, `25`, `90`, `91`, `99`) sequence scripts inside one group; they say nothing across groups. See "Provisioning flow" below for the real order.
 - `.chezmoiscripts/` (source root only) → a directory whose contents are *only* run scripts; they execute normally but produce no files in `~`. This is where every `run_*` script in this repo lives, split into `before/` and `after/` subdirectories. Two things to know: a non-script file anywhere under it is a hard error (`not a script`), and within a group the sort key is the full relative target path, so a subdirectory name outranks the numeric prefixes. The `before_`/`after_` attribute still dominates both, which is why `after/` sorting ahead of `before/` alphabetically changes nothing. Verified empirically.
-- `.chezmoiignore` files scope which paths under a directory chezmoi manages (e.g. `dot_config/nvim/.chezmoiignore` excludes `lazy-lock.json`; `dot_config/karabiner/.chezmoiignore` excludes `automatic_backups`).
-- Any path component starting with a literal `.` (not `dot_`) is invisible to chezmoi — it's never applied, anywhere in the tree (`.chezmoiscripts/` and the other `.chezmoi*` names are special-cased, not exceptions to this). This is why global Claude Code settings live in `dot_claude/` (translated to `~/.claude`, scoped down by its own `.chezmoiignore` to just `settings.json`, `statusline-command.sh`, `keybindings.json`) rather than a literal `.claude/`, and why the repo-root `.claude/` and any nested `.claude/` (e.g. `dot_config/nvim/.claude/`) are safe, chezmoi-invisible spots for Claude Code's own project config/skills.
+- `.chezmoiignore` files scope which paths under a directory chezmoi manages (e.g. `dot_config/karabiner/.chezmoiignore` excludes `automatic_backups`).
+- `.chezmoiexternal.toml` (source root) declares paths chezmoi populates from outside the repo, keyed by *target* path. This repo uses one: `.config/nvim` is a `type = "git-repo"` external cloned from github.com/itstommymorgan/nvim. Three things about `git-repo` externals, verified empirically:
+    - They are **opaque to `chezmoi diff` and `chezmoi status`** — neither shows anything for `.config/nvim`, ever. `chezmoi managed` does list it. Don't read an empty diff as "no change"; chezmoi only clones and pulls, it never diffs the contents.
+    - **The target must not already exist as a non-git directory.** If the path exists, chezmoi skips the clone and runs `git pull` in it, which dies with `not a git repository` / exit status 128 and fails the whole apply. Migrating a directory into an external means deleting it first.
+    - The clone is a plain git checkout, so **this repo's `.chezmoiignore` does not apply to it**. `CLAUDE.md` and `.claude/` are stripped from everything else by `**/CLAUDE.md`, but the nvim repo's copies land in `~/.config/nvim` because they are simply files in that repo.
+
+  `refreshPeriod = "168h"` gates the pull, so applies inside that window are a silent no-op. It gates the **clone** too: delete `~/.config/nvim` and a plain `chezmoi apply` will not bring it back — it stays missing, with no error, until the period lapses. `chezmoi apply --refresh-externals` restores it immediately, and is the command to reach for any time the external looks wrong. `pull.args = ["--ff-only"]` means anything that dirties a *tracked* file in the checkout will break the next refresh — which is why the nvim repo gitignores `lazy-lock.json` and `doc/tags` rather than tracking them.
+- Any path component starting with a literal `.` (not `dot_`) is invisible to chezmoi — it's never applied, anywhere in the tree (`.chezmoiscripts/` and the other `.chezmoi*` names are special-cased, not exceptions to this). This is why global Claude Code settings live in `dot_claude/` (translated to `~/.claude`, scoped down by its own `.chezmoiignore` to just `settings.json`, `statusline-command.sh`, `keybindings.json`) rather than a literal `.claude/`, and why the repo-root `.claude/`, and any nested `.claude/` a subtree might grow, are safe chezmoi-invisible spots for Claude Code's own project config/skills.
 
 Common commands (run from anywhere, chezmoi finds the source dir):
 - `chezmoi apply` — render templates and run applicable `run_*` scripts against `~`.
@@ -56,25 +62,27 @@ On first run on a new machine, chezmoi prompts for `hostname`, `email` (git comm
 
 6. `.chezmoiscripts/after/run_once_after_01-auth-gh.sh.tmpl` — `gh auth login`.
 7. `.chezmoiscripts/after/run_onchange_after_10-install-mise.sh.tmpl` — installs mise-managed tool versions (`dot_config/mise/config.toml.tmpl`: ruby, node).
-8. `.chezmoiscripts/after/run_after_90-update-zplug.sh.tmpl` — installs/updates zsh plugins via zplug.
-9. `.chezmoiscripts/after/run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins.
+8. `.chezmoiscripts/after/run_after_90-update-antidote.sh.tmpl` — pulls the zsh plugin repos and pre-generates antidote's static load files, so the first interactive shell on a new machine isn't blocked on a dozen git clones.
+9. `.chezmoiscripts/after/run_after_91-update-nvim-lazy.sh.tmpl` — headless-syncs Neovim's `lazy.nvim` plugins (`+Lazy! sync`, so every apply also *updates* them) and regenerates `doc/tags`, which nothing else does now that the nvim repo gitignores it. Operates on the `.config/nvim` external, which is already on disk by now: externals are populated during the file-writing phase, ahead of every `after_` script.
 10. `.chezmoiscripts/after/run_once_after_99-loginitems.sh.tmpl` — registers GUI apps as macOS login items.
 11. `.chezmoiscripts/after/run_once_after_99z-manual-checklist.sh.tmpl` — prints the steps chezmoi can't perform (macOS TCC grants, account logins) and blocks on Enter when interactive. Content lives in `MANUAL-SETUP.md`, which is `.chezmoiignore`d so it stays repo-only.
 
 ## Shell (zsh)
 
-Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshenv` loads for *every* shell invocation (including non-interactive/scripts), so it only sets up Homebrew's PATH (`__tm_setup_homebrew`, arch-aware: `/opt/homebrew` on arm64 vs `/usr/local`) and mise shims — needed for scripts to resolve tools correctly. `.zshrc` (interactive-only) does the heavier lifting: activates mise, sources zplug and the zplug plugin list, sources every custom script, and sets interactive-only env vars (`BAT_THEME`, `KEYTIMEOUT`, `LC_ALL`). See `dot_zsh/CLAUDE.md` for the zplug/custom-script details.
+Split across `dot_zshenv` and `dot_zshrc` deliberately, not redundantly: `.zshenv` loads for *every* shell invocation (including non-interactive/scripts), so it only sets up Homebrew's PATH (`__tm_setup_homebrew`, arch-aware: `/opt/homebrew` on arm64 vs `/usr/local`) and mise shims — needed for scripts to resolve tools correctly. `.zshrc` (interactive-only) does the heavier lifting: activates mise, sets interactive-only env vars (`BAT_THEME`, `KEYTIMEOUT`, `LC_ALL`), sources every `~/.zsh/custom/*.zsh`, and *then* sources `~/.zsh/plugins.zsh` — plugins last, on purpose. Plugins are managed by antidote in static mode, not zplug. See `dot_zsh/CLAUDE.md` for the loader, the two-list `fpath`/`compinit` split, and the plugin ordering constraints, all of which are load-bearing.
 
 ## Per-tool docs
 
-Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads automatically once it touches a file in that subtree: `dot_zsh/CLAUDE.md`, `dot_config/nvim/CLAUDE.md`, `dot_hammerspoon/CLAUDE.md`, `dot_config/karabiner/CLAUDE.md`.
+Tool-specific details live in nested `CLAUDE.md` files, which Claude Code loads automatically once it touches a file in that subtree: `dot_zsh/CLAUDE.md`, `dot_hammerspoon/CLAUDE.md`, `dot_config/karabiner/CLAUDE.md`.
+
+Neovim is no longer one of them — it lives in its own repo (github.com/itstommymorgan/nvim, checked out as the `.config/nvim` external) and carries its own `CLAUDE.md` there. Edit the nvim config in that repo, not here; nothing under `~/.config/nvim` is chezmoi source state any more.
 
 ## Claude Code config in this repo
 
 Two distinct things share the `.claude` name here, and conflating them is the easy mistake:
 
 - **`dot_claude/`** → applied to `~/.claude`. This is *global user config* for Claude Code itself (`modify_settings.json`, `keybindings.json`, `statusline-command.sh`, `CLAUDE.md`, `themes/`). Its `.chezmoiignore` is an allowlist (`*` then `!`-exceptions), so **a new file here is ignored until explicitly allowlisted**. Everything else under `~/.claude` (sessions, projects, auto memory, plugins) is machine-local runtime state and deliberately unmanaged.
-- **`.claude/`** (repo root, and nested ones like `dot_config/nvim/.claude/`) → chezmoi-invisible, never applied. This is *this repo's own* Claude Code config: skills, settings.local.json.
+- **`.claude/`** (repo root, and any nested ones) → chezmoi-invisible, never applied. This is *this repo's own* Claude Code config: skills, settings.local.json.
 
 Note the root `.chezmoiignore` blocks `**/CLAUDE.md` to keep repo docs out of `~`, with a single negation for `.claude/CLAUDE.md` (the user-scope one). Patterns there match **target** paths, so the negation reads `.claude/`, not `dot_claude/`.
 
@@ -84,9 +92,9 @@ The contract: **keys declared in that script are repo-authoritative and overwrit
 
 ### Choosing between CLAUDE.md, rules, and skills
 
-- **`CLAUDE.md`** — always loaded for its directory and below. Facts that apply to every session in that subtree. The nested per-tool files (`dot_zsh/`, `dot_config/nvim/`, …) already scope themselves this way: they load on demand when Claude reads a file in that subtree, so they need no extra path scoping.
+- **`CLAUDE.md`** — always loaded for its directory and below. Facts that apply to every session in that subtree. The nested per-tool files (`dot_zsh/`, `dot_hammerspoon/`, …) already scope themselves this way: they load on demand when Claude reads a file in that subtree, so they need no extra path scoping.
 - **`.claude/rules/*.md`** — same as CLAUDE.md, but supports `paths:` frontmatter (globs) to load only when Claude touches matching files. Worth reaching for only if instructions need to follow a *file pattern* that cuts across directories; the per-directory CLAUDE.md split above already covers the directory case, so don't convert those to rules.
-- **`.claude/skills/`** — multi-step procedures, loaded on demand rather than every session. A skill only relevant to one subtree belongs in a nested `.claude/skills/` inside it (e.g. `dot_config/nvim/.claude/skills/`); the more specific skill wins if a same-named one exists at both levels.
+- **`.claude/skills/`** — multi-step procedures, loaded on demand rather than every session. A skill only relevant to one subtree belongs in a nested `.claude/skills/` inside it; the more specific skill wins if a same-named one exists at both levels.
 
 ## Editing templates
 

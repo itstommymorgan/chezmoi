@@ -1,3 +1,5 @@
 #!/usr/bin/env zsh
 
-nvim --headless "+Lazy! sync" +qa
+# doc/tags is gitignored in the nvim repo, so a fresh checkout has none and
+# `:help tm-custom` fails until something regenerates it. Nothing else does.
+nvim --headless "+Lazy! sync" "+lua vim.cmd.helptags(vim.fn.stdpath('config')..'/doc')" +qa
