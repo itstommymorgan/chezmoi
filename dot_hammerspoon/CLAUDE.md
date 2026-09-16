@@ -7,7 +7,7 @@ Two things that aren't guessable from the files:
 - **The hyper key comes from Karabiner.** Every binding hangs off `ext.hyper` (`cmd+alt+ctrl+shift`); `dot_config/karabiner/private_karabiner.json` maps `right_command` to that combo when held and to `hyper+space` — the MicMute binding — when tapped alone. Changing either side breaks the other, and neither file's tests will tell you.
 - **Scope is deliberately the remainder.** Raycast covers launching and search, Karabiner covers remapping, AltTab covers window switching. Before adding something here, check it isn't already one of those. Conversely `ControlEscape.spoon` was removed precisely because Karabiner's `caps_lock` rule had taken it over and the two double-fired escape.
 
-Highlights: `keybinder.lua` wraps `RecursiveBinder.spoon` for all keybinding declarations, which are then invoked from `init.lua`; `meeting_checks.lua` detects a call — camera, Zoom window, or a Phone/FaceTime audio call — and drives Spotify, DnD and the Home Assistant on-air light (`hass.lua`); `focus.lua` drives Do Not Disturb through hand-made Shortcuts because macOS 26 exposes no scriptable path.
+Highlights: `keybinder.lua` wraps `RecursiveBinder.spoon` for all keybinding declarations, which are then invoked from `init.lua`; `meeting_checks.lua` detects a video call — camera in use or a Zoom meeting window — and drives Spotify, DnD and the Home Assistant on-air light (`hass.lua`); audio calls are deliberately out of scope, see its header; `focus.lua` drives Do Not Disturb through hand-made Shortcuts because macOS 26 exposes no scriptable path.
 
 Settings live in `hs.settings`, not a config file — `hs.settings.set("meeting_checks", true)` then reload.
 

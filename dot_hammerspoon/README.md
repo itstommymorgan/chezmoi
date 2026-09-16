@@ -82,30 +82,22 @@ saves me from killing the whole application unless I really intend to.
 reversing both when it ends. It also tracks whether a Zoom call is in progress so
 `hyper g v` can jump to it.
 
-Three signals, OR'd:
+Two signals, OR'd:
 
 - **Camera in use.** App-agnostic, so it covers Google Meet in Zen, Discord, Slack
   huddles and FaceTime with no per-browser tab scraping. This is what replaced the
   old Chrome/JXA hunt for a `meet.google.com` tab.
 - **A Zoom meeting window**, because a camera-off Zoom call never touches the camera.
-- **An audio call** in `Phone.app` (the macOS 26 iPhone bridge) or `FaceTime.app`.
 
-Audio calls needed their own signal because they touch no camera and open no window
-— during a call neither app shows one or changes its title, so there is nothing for
-a windowfilter to match. What does change is that **`Video > Mute` is only enabled
-while a call exists**. Measured on a real bridge call: Phone launched with Mute
-already enabled while still ringing, the mic followed two seconds later, Mute went
-false as the call ended and the app quit a second after that.
-
-That check is deliberately mic-independent. The mic would catch every audio call,
-but Wispr Flow holds it for dictation — and since dictating into Slack is normal and
-Slack is always open, "mic plus a call app is running" would false-positive
-constantly. The menu state has no such problem, and it goes true *before* the mic.
-
-Sampling is needed because Mute flips inside the app's lifetime rather than at
-launch or quit, and no notification exists for a menu item changing state. The poll
-only runs while one of those apps is up, which outside a call is never — they launch
-for the call and quit when it ends.
+**Audio calls are deliberately not detected.** There was a third signal for
+`Phone.app` (the macOS 26 iPhone bridge) and `FaceTime.app`, hung off `Video > Mute`
+being enabled only while a call exists. It was removed because that menu item enables
+while the phone is still *ringing*, and neither app's menu tree has an Answer or End
+Call item to check instead — so an incoming call I never answered would announce a
+meeting, kill the music, set DnD and light the lamp, then clear it all again on the
+way to voicemail. Nothing else in those apps distinguishes ringing from answered, and
+a phone call is far less disruptive than a video call anyway, so the signal went
+rather than getting a timing heuristic bolted on.
 
 **OBS inverts the camera signal.** OBS grabs a real camera the moment it launches,
 long before any call, so while it's running "a real camera is in use" means nothing.
@@ -116,8 +108,8 @@ real cameras; OBS up → watch the virtual one. All four states are verified.
 The gap: OBS running *and* a call using a webcam directly rather than through OBS.
 Zoom is still covered by its window filter; a browser call in that state is missed.
 
-The mic would catch every camera-off call, but Wispr Flow grabs it for dictation, so
-it's a false-positive generator and is deliberately unused.
+The mic would catch every camera-off call, but Wispr Flow grabs it for dictation and
+Slack is always open, so it's a false-positive generator and is deliberately unused.
 
 Controlled by the `hs.settings` key `meeting_checks`.
 
