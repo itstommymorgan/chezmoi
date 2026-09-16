@@ -262,6 +262,7 @@ All prefixed with the hyper key (a held `right_command`).
 | Key | Action |
 | --- | --- |
 | `space` | Toggle microphone mute |
+| `l` | Lock the screen |
 | `m` | Center the mouse on the active window |
 | `s` | Screenshot: crosshair, drag, straight to the clipboard |
 | `g b` / `g t` | Zen / Ghostty |

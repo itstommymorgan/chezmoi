@@ -213,6 +213,7 @@ ext.utils.keybinder({
       },
     },
   },
+  { key = "l", comment = "Lock Screen", fun = hs.caffeinate.lockScreen },
   { key = "m", comment = "Center Mouse", fun = ext.app.centerMouseOnActiveWindow },
   { key = "s", comment = "Screenshot", fun = screenshotToClipboard },
   {
