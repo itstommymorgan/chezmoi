@@ -1,5 +1,3 @@
-# Font settings kept in sync with dot_config/wezterm/wezterm.lua.
-
 theme = Dracula
 
 # Ghostty only exposes the Mono variant of the Nerd Font patch.
@@ -13,7 +11,7 @@ font-feature = ss02, ss06, ss07, zero
 window-padding-x = 8
 window-padding-y = 6
 window-padding-balance = true
-# wezterm's window_decorations = "RESIZE": no titlebar, window still resizable.
+# No titlebar; window still resizable.
 # Costs titlebar dragging -- use option+click on the frame instead.
 macos-titlebar-style = hidden
 
@@ -25,3 +23,17 @@ macos-option-as-alt = true
 window-save-state = always
 confirm-close-surface = false
 mouse-hide-while-typing = true
+
+# Leader is ctrl+space (caps is remapped to ctrl); everything else hangs off it.
+keybind = ctrl+space>v=new_split:right
+keybind = ctrl+space>s=new_split:down
+keybind = ctrl+space>h=goto_split:left
+keybind = ctrl+space>j=goto_split:down
+keybind = ctrl+space>k=goto_split:up
+keybind = ctrl+space>l=goto_split:right
+keybind = ctrl+space>z=toggle_split_zoom
+keybind = ctrl+space>e=equalize_splits
+keybind = ctrl+space>q=close_surface
+# Short scratch strip along the bottom; resize is in pixels, not lines.
+keybind = ctrl+space>b=new_split:down
+keybind = chain=resize_split:down,300
